@@ -252,55 +252,14 @@
             font-weight: 700;
             cursor: pointer;
             user-select: none;
-            transition: background 0.2s;
+            transition: background 0.2s, color 0.2s;
+            background: transparent;
+            color: var(--ink);
         }
-        .subject-header.gk {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        .subject-header.aptitude {
-            background: #ede9fe;
-            color: #5b21b6;
-        }
-        .subject-header.reasoning {
-            background: #fce7f3;
-            color: #9d174d;
-        }
-        .subject-header.english {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        .subject-header.science_comp {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        .subject-header.current {
-            background: #ffedd5;
-            color: #9a3412;
-        }
-        [data-theme="dark"] .subject-header.gk {
-            background: rgba(251, 191, 36, 0.2);
-            color: #fbbf24;
-        }
-        [data-theme="dark"] .subject-header.aptitude {
-            background: rgba(167, 139, 250, 0.2);
-            color: #a78bfa;
-        }
-        [data-theme="dark"] .subject-header.reasoning {
-            background: rgba(244, 114, 182, 0.2);
-            color: #f472b6;
-        }
-        [data-theme="dark"] .subject-header.english {
-            background: rgba(96, 165, 250, 0.2);
-            color: #60a5fa;
-        }
-        [data-theme="dark"] .subject-header.science_comp {
-            background: rgba(45, 212, 191, 0.2);
-            color: #2dd4bf;
-        }
-        [data-theme="dark"] .subject-header.current {
-            background: rgba(251, 146, 60, 0.2);
-            color: #fb923c;
+        /* No more fixed color classes - colors applied dynamically via JS */
+        [data-theme="dark"] .subject-header {
+            background: transparent;
+            color: var(--ink);
         }
         .subject-arrow {
             transition: transform 0.35s ease;
@@ -1789,7 +1748,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Google Sheets Loader (admin only) -->
+                        <!-- Google Sheets Loader -->
                         <div class="edit-card" style="margin-top:14px;">
                             <h3>📥 Admin: Load from Google Sheet</h3>
                             <p style="font-size:12px; color:var(--muted);">Paste the public TSV link and click Load. Data will be saved permanently.</p>
@@ -1989,15 +1948,61 @@
             function groupLabel(gk) { const groups = getSubjectGroups(), found = groups.find(g => g.key === gk); return found ? found.name.replace(/^[^\s]+ /,"") : gk; }
             function getQuestionRef(sk, idx) { const s = getSubjects().find(x => x.key === sk), q = questionBank[sk]?.[idx]; if (!s || !q) return null; return { ...q, _subject: sk, _index: idx, _chapterName: s.name, _groupName: groupLabel(s.group) }; }
 
+            // Rotating colors for subject headers (no fixed class)
+            const SUBJECT_COLORS = [
+                '#f59e0b', // Yellow
+                '#8b5cf6', // Purple
+                '#ec4899', // Pink
+                '#3b82f6', // Blue
+                '#22c55e', // Green
+                '#f97316'  // Orange
+            ];
+            // Dark mode variants (softer)
+            const SUBJECT_COLORS_DARK = [
+                '#fbbf24',
+                '#a78bfa',
+                '#f472b6',
+                '#60a5fa',
+                '#4ade80',
+                '#fb923c'
+            ];
+
+            function getSubjectColor(index, isDark) {
+                const colors = isDark ? SUBJECT_COLORS_DARK : SUBJECT_COLORS;
+                return colors[index % colors.length];
+            }
+
             function populateSubjectsUI() {
                 const groups = getSubjectGroups();
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
                 $("subjectAccordions").innerHTML = groups.map((g,gi) => {
                     const chs = getSubjects().filter(s => s.group === g.key);
-                    return `<div class="subject-accordion ${gi===0?"open":""}"><div class="subject-header ${g.className||''}" data-group="${g.key}"><span>${g.name}</span><span class="subject-arrow">▼</span></div><div class="subject-chapters ${gi===0?"open":""}"><div class="subject-chapters-inner">${chs.map(s=>`<label class="chapter-item"><input type="checkbox" class="chapter-cb" value="${escapeAttr(s.key)}" ${selectedKeys.has(s.key)?"checked":""}><span>${escapeHtml(s.name)}</span><span class="q-count">[${getCount(s.key)}]</span></label>`).join("")||"<span style='font-size:13px;color:#64748b;'>এই গ্রুপে কোনো chapter নেই।</span>"}</div></div></div>`;
+                    const color = getSubjectColor(gi, isDark);
+                    // text color: if dark mode use white, else use black/dark
+                    const textColor = isDark ? '#e2e8f0' : '#1a1e2b';
+                    return `<div class="subject-accordion ${gi===0?"open":""}">
+                        <div class="subject-header" style="background:${color}; color:${textColor};" data-group="${g.key}">
+                            <span>${g.name}</span>
+                            <span class="subject-arrow" style="color:${textColor};">▼</span>
+                        </div>
+                        <div class="subject-chapters ${gi===0?"open":""}">
+                            <div class="subject-chapters-inner">
+                                ${chs.map(s=>`<label class="chapter-item"><input type="checkbox" class="chapter-cb" value="${escapeAttr(s.key)}" ${selectedKeys.has(s.key)?"checked":""}><span>${escapeHtml(s.name)}</span><span class="q-count">[${getCount(s.key)}]</span></label>`).join("")||"<span style='font-size:13px;color:#64748b;'>এই গ্রুপে কোনো chapter নেই।</span>"}
+                            </div>
+                        </div>
+                    </div>`;
                 }).join("");
                 document.querySelectorAll(".subject-header").forEach(h => { h.onclick = () => { const a = h.closest(".subject-accordion"), b = a.querySelector(".subject-chapters"); a.classList.toggle("open"); b.classList.toggle("open"); }; });
                 document.querySelectorAll(".chapter-cb").forEach(cb => { cb.onchange = () => { cb.checked ? selectedKeys.add(cb.value) : selectedKeys.delete(cb.value); saveSelection(); }; });
             }
+
+            // Override applyTheme to re-render subject colors on theme change
+            const originalApplyTheme = applyTheme;
+            applyTheme = function(theme) {
+                originalApplyTheme(theme);
+                // Re-render subject accordions with new colors
+                populateSubjectsUI();
+            };
 
             function updateAllCounters() {
                 const cs = $("targetChapterSimple"); if(cs) { const cv = cs.value; cs.innerHTML = getSubjects().map(s => `<option value="${escapeAttr(s.key)}">${escapeHtml(groupLabel(s.group))} - ${escapeHtml(s.name)} [${getCount(s.key)}]</option>`).join(""); if(cv && getSubjects().some(s=>s.key===cv)) cs.value = cv; }
@@ -2434,7 +2439,7 @@
             function applyTheme(theme) { document.documentElement.setAttribute('data-theme', theme); const btn = $('themeToggleBtn'); if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙'; }
             function toggleTheme() { const current = document.documentElement.getAttribute('data-theme') || 'light'; const next = current === 'dark' ? 'light' : 'dark'; applyTheme(next); localStorage.setItem(THEME_KEY, next); }
 
-            // ---------- Google Sheets Loader (auto-creates subjects & chapters) ----------
+            // ---------- Google Sheets Loader ----------
             function loadFromSheet() {
                 const url = $("sheetUrlInput").value.trim();
                 if (!url) return showError("দয়া করে Google Sheet এর TSV URL দিন।");
@@ -2606,7 +2611,7 @@
             function decodeEmbeddedBank() { if (typeof EMBEDDED_BANK === 'string' && EMBEDDED_BANK.length > 0) { try { const json = decodeURIComponent(escape(atob(EMBEDDED_BANK))); return JSON.parse(json); } catch (e) { console.warn("Failed to decode embedded bank."); } } return null; }
             function init() { const savedTheme = localStorage.getItem(THEME_KEY) || 'light'; applyTheme(savedTheme); initCredits(); updateAllCounters(); populateSubjectsUI(); updateModeButtons(); wireEvents(); if (!loadQuizState()) { renderQuiz(); renderNav(); updateScore(); } updateTimerDisplay(); }
 
-            // ---------- IMPORTANT: localStorage priority over embedded bank ----------
+            // ---------- localStorage priority ----------
             let savedBank = loadJson(BANK_KEY, null);
             let embeddedBank = decodeEmbeddedBank();
             let questionBank = normalizeBank(savedBank || embeddedBank || buildDefaultBank());
