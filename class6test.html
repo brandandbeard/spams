@@ -2434,13 +2434,10 @@
             function applyTheme(theme) { document.documentElement.setAttribute('data-theme', theme); const btn = $('themeToggleBtn'); if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙'; }
             function toggleTheme() { const current = document.documentElement.getAttribute('data-theme') || 'light'; const next = current === 'dark' ? 'light' : 'dark'; applyTheme(next); localStorage.setItem(THEME_KEY, next); }
 
-            // ---------- Google Sheets Loader ----------
+            // ---------- Google Sheets Loader (enhanced: auto-creates subjects & chapters) ----------
             function loadFromSheet() {
-                const chapter = $("targetChapterSimple").value;
-                if (!chapter) return showError("দয়া করে একটি chapter বেছে নিন।");
                 const url = $("sheetUrlInput").value.trim();
                 if (!url) return showError("দয়া করে Google Sheet এর TSV URL দিন।");
-
                 const statusEl = document.getElementById('sheetLoadStatus');
                 statusEl.innerHTML = '⏳ Loading sheet...';
                 statusEl.style.color = 'var(--muted)';
@@ -2453,26 +2450,54 @@
                     .then(tsv => {
                         const rows = tsv.split(/\r?\n/).filter(line => line.trim() !== '');
                         if (rows.length < 2) throw new Error('Sheet appears empty or header only.');
-                        // skip header row (assume first row is header)
+                        // Skip first row (header)
                         const dataRows = rows.slice(1);
                         let added = 0, skipped = 0;
+                        const groups = getSubjectGroups();
+                        const subjects = getSubjects();
+
                         for (const row of dataRows) {
                             const cols = row.split('\t').map(c => c.trim());
-                            // Expect at least 6 columns: Q, OptA, OptB, OptC, OptD, Correct
-                            if (cols.length < 6) { skipped++; continue; }
-                            const qText = cols[0];
-                            const opts = [cols[1], cols[2], cols[3], cols[4]];
-                            let correctIdx = parseInt(cols[5]);
+                            // Columns: 0:SubjectGroup, 1:Chapter, 2:Question, 3:OptA, 4:OptB, 5:OptC, 6:OptD, 7:Correct, 8:Explanation, 9:Difficulty
+                            if (cols.length < 8) { skipped++; continue; }
+                            const groupName = cols[0] || 'General Knowledge';
+                            const chapterName = cols[1] || 'Uncategorized';
+                            const qText = cols[2];
+                            const opts = [cols[3], cols[4], cols[5], cols[6]];
+                            let correctIdx = parseInt(cols[7]);
                             if (isNaN(correctIdx)) {
-                                // maybe A/B/C/D
                                 const map = { 'A':0, 'B':1, 'C':2, 'D':3, 'a':0, 'b':1, 'c':2, 'd':3 };
-                                const letter = cols[5].trim().toUpperCase();
+                                const letter = cols[7].trim().toUpperCase();
                                 if (letter in map) correctIdx = map[letter];
                                 else { skipped++; continue; }
                             }
                             if (correctIdx < 0 || correctIdx > 3) { skipped++; continue; }
-                            const explanation = cols.length > 6 ? cols[6] : '';
-                            const difficulty = cols.length > 7 ? cols[7].toLowerCase() : 'medium';
+                            const explanation = cols.length > 8 ? cols[8] : '';
+                            const difficulty = cols.length > 9 ? cols[9].toLowerCase() : 'medium';
+
+                            // Ensure subject group exists
+                            let groupKey = groupName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                            if (!groups.find(g => g.key === groupKey)) {
+                                questionBank.__subjectGroups__.push({
+                                    key: groupKey,
+                                    name: groupName,
+                                    className: ''
+                                });
+                            }
+
+                            // Ensure chapter exists under that group
+                            let chapterKey = chapterName.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + groupKey;
+                            if (!subjects.find(s => s.key === chapterKey)) {
+                                questionBank.__subjects__.push({
+                                    key: chapterKey,
+                                    group: groupKey,
+                                    name: chapterName,
+                                    num: questionBank.__subjects__.length + 1
+                                });
+                                questionBank[chapterKey] = []; // initialize
+                            }
+
+                            // Add question
                             const q = normalizeQuestion({
                                 q: qText,
                                 o: opts,
@@ -2481,16 +2506,19 @@
                                 difficulty: difficulty
                             });
                             if (q) {
-                                questionBank[chapter].push(q);
+                                questionBank[chapterKey].push(q);
                                 added++;
                             } else {
                                 skipped++;
                             }
                         }
+
+                        // Save and refresh UI
                         saveBank();
                         const msg = `✅ ${added} প্রশ্ন যোগ হয়েছে.${skipped ? ` ${skipped}টি row skip হয়েছে.` : ''}`;
                         statusEl.innerHTML = msg;
                         statusEl.style.color = 'var(--green)';
+                        populateSubjectsUI();
                         updateAllCounters();
                         showSuccess(msg);
                     })
