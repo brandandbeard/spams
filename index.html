@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Platform - Class 5 to 12</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            padding: 30px 0;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .card-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 1em;
+        }
+
+        .card:nth-child(1) .card-icon { color: #ff6b6b; }
+        .card:nth-child(2) .card-icon { color: #4ecdc4; }
+        .card:nth-child(3) .card-icon { color: #45b7d1; }
+        .card:nth-child(4) .card-icon { color: #f7b731; }
+        .card:nth-child(5) .card-icon { color: #5f27cd; }
+        .card:nth-child(6) .card-icon { color: #ff9ff3; }
+        .card:nth-child(7) .card-icon { color: #54a0ff; }
+        .card:nth-child(8) .card-icon { color: #5cd85a; }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding: 20px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .cards-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Quiz Platform</h1>
+            <p>Class 5 থেকে Class 12 পর্যন্ত পরীক্ষা দিন</p>
+        </header>
+
+        <div class="cards-container">
+            <a href="class5test.html" class="card">
+                <div class="card-icon">🎓</div>
+                <h2>Class 5</h2>
+                <p>পঞ্চম শ্রেণীর কুইজ</p>
+            </a>
+
+            <a href="class6test.html" class="card">
+                <div class="card-icon">📖</div>
+                <h2>Class 6</h2>
+                <p>ষষ্ঠ শ্রেণীর কুইজ</p>
+            </a>
+
+            <a href="class7test.html" class="card">
+                <div class="card-icon">✏️</div>
+                <h2>Class 7</h2>
+                <p>সপ্তম শ্রেণীর কুইজ</p>
+            </a>
+
+            <a href="class8test.html" class="card">
+                <div class="card-icon">📝</div>
+                <h2>Class 8</h2>
+                <p>অষ্টম শ্রেণীর কুইজ</p>
+            </a>
+
+            <a href="class9test.html" class="card">
+                <div class="card-icon">🎯</div>
+                <h2>Class 9</h2>
+                <p>নবম শ্রেণীর কুইজ</p>
+            </a>
+
+            <a href="class10test.html" class="card">
+                <div class="card-icon">🏆</div>
+                <h2>Class 10</h2>
+                <p>দশম শ্রেণীর কুইজ</p>
+            </a>
+
+            <a href="class11test.html" class="card">
+                <div class="card-icon">📚</div>
+                <h2>Class 11</h2>
+                <p>একাদশ শ্রেণীর কুইজ</p>
+            </a>
+
+            <a href="class12test.html" class="card">
+                <div class="card-icon">🎓</div>
+                <h2>Class 12</h2>
+                <p>দ্বাদশ শ্রেণীর কুইজ</p>
+            </a>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 Quiz Platform. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
