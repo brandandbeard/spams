@@ -1789,17 +1789,17 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- NEW: Google Sheets Loader -->
+                        <!-- Google Sheets Loader (admin only) -->
                         <div class="edit-card" style="margin-top:14px;">
-                            <h3>📥 Load from Google Sheet</h3>
-                            <p style="font-size:12px; color:var(--muted);">Paste the public TSV link (File → Publish to web → TSV) and click Load.</p>
+                            <h3>📥 Admin: Load from Google Sheet</h3>
+                            <p style="font-size:12px; color:var(--muted);">Paste the public TSV link and click Load. Data will be saved permanently.</p>
                             <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
                                 <input type="text" id="sheetUrlInput" class="sheet-url-input" placeholder="Paste TSV URL here..." value="https://docs.google.com/spreadsheets/d/e/2PACX-1vTx7-n5ATXwTftgyzPgql2F5E5nPVh8Mrzp2HZQKJ75lPTv8sk4cQb31F8WYkJOlv90I1zKokM42F1Y/pub?output=tsv" style="flex:3; min-width:200px;">
                                 <button id="loadSheetBtn" style="background: var(--accent);">📥 Load from Sheet</button>
                             </div>
                             <div id="sheetLoadStatus" class="status-msg"></div>
                         </div>
-                        <!-- END NEW -->
+                        <!-- END -->
                         <div class="edit-card" style="margin-top:14px;">
                             <h3>✏️ Add Single Question</h3>
                             <textarea id="simpleQText" placeholder="Question"></textarea>
@@ -1826,7 +1826,7 @@
             </section>
         </div><!-- end .container -->
 
-        <!-- ===== static footer with glowing heart ===== -->
+        <!-- ===== static footer ===== -->
         <div class="footer-contact">
             <a href="mailto:arifbeldanga@gmail.com" class="footer-link email-link" title="ইমেইল করুন">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2434,7 +2434,7 @@
             function applyTheme(theme) { document.documentElement.setAttribute('data-theme', theme); const btn = $('themeToggleBtn'); if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙'; }
             function toggleTheme() { const current = document.documentElement.getAttribute('data-theme') || 'light'; const next = current === 'dark' ? 'light' : 'dark'; applyTheme(next); localStorage.setItem(THEME_KEY, next); }
 
-            // ---------- Google Sheets Loader (enhanced: auto-creates subjects & chapters) ----------
+            // ---------- Google Sheets Loader (auto-creates subjects & chapters) ----------
             function loadFromSheet() {
                 const url = $("sheetUrlInput").value.trim();
                 if (!url) return showError("দয়া করে Google Sheet এর TSV URL দিন।");
@@ -2450,7 +2450,6 @@
                     .then(tsv => {
                         const rows = tsv.split(/\r?\n/).filter(line => line.trim() !== '');
                         if (rows.length < 2) throw new Error('Sheet appears empty or header only.');
-                        // Skip first row (header)
                         const dataRows = rows.slice(1);
                         let added = 0, skipped = 0;
                         const groups = getSubjectGroups();
@@ -2458,7 +2457,6 @@
 
                         for (const row of dataRows) {
                             const cols = row.split('\t').map(c => c.trim());
-                            // Columns: 0:SubjectGroup, 1:Chapter, 2:Question, 3:OptA, 4:OptB, 5:OptC, 6:OptD, 7:Correct, 8:Explanation, 9:Difficulty
                             if (cols.length < 8) { skipped++; continue; }
                             const groupName = cols[0] || 'General Knowledge';
                             const chapterName = cols[1] || 'Uncategorized';
@@ -2475,7 +2473,6 @@
                             const explanation = cols.length > 8 ? cols[8] : '';
                             const difficulty = cols.length > 9 ? cols[9].toLowerCase() : 'medium';
 
-                            // Ensure subject group exists
                             let groupKey = groupName.toLowerCase().replace(/[^a-z0-9]/g, '_');
                             if (!groups.find(g => g.key === groupKey)) {
                                 questionBank.__subjectGroups__.push({
@@ -2485,7 +2482,6 @@
                                 });
                             }
 
-                            // Ensure chapter exists under that group
                             let chapterKey = chapterName.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + groupKey;
                             if (!subjects.find(s => s.key === chapterKey)) {
                                 questionBank.__subjects__.push({
@@ -2494,10 +2490,9 @@
                                     name: chapterName,
                                     num: questionBank.__subjects__.length + 1
                                 });
-                                questionBank[chapterKey] = []; // initialize
+                                questionBank[chapterKey] = [];
                             }
 
-                            // Add question
                             const q = normalizeQuestion({
                                 q: qText,
                                 o: opts,
@@ -2513,7 +2508,6 @@
                             }
                         }
 
-                        // Save and refresh UI
                         saveBank();
                         const msg = `✅ ${added} প্রশ্ন যোগ হয়েছে.${skipped ? ` ${skipped}টি row skip হয়েছে.` : ''}`;
                         statusEl.innerHTML = msg;
@@ -2603,7 +2597,6 @@
                 $("backupSelectedJsonBtn").onclick = backupSelected;
                 $("backupFullJsonBtn").onclick = backupFull;
                 $("downloadHtmlBtn").onclick = downloadPermanentHtml;
-                // Google Sheet load
                 $("loadSheetBtn").onclick = loadFromSheet;
 
                 document.addEventListener("keydown", e => { const t = document.activeElement?.tagName?.toLowerCase(); if (["input","textarea","select"].includes(t)) return; if (["1","2","3","4"].includes(e.key) && optionsVisible) { const o = document.querySelector(`.option[data-opt="${Number(e.key)-1}"]`); if (o) o.click(); } if (e.key === "ArrowRight") moveQuestion(1); if (e.key === "ArrowLeft") moveQuestion(-1); });
@@ -2613,7 +2606,11 @@
             function decodeEmbeddedBank() { if (typeof EMBEDDED_BANK === 'string' && EMBEDDED_BANK.length > 0) { try { const json = decodeURIComponent(escape(atob(EMBEDDED_BANK))); return JSON.parse(json); } catch (e) { console.warn("Failed to decode embedded bank."); } } return null; }
             function init() { const savedTheme = localStorage.getItem(THEME_KEY) || 'light'; applyTheme(savedTheme); initCredits(); updateAllCounters(); populateSubjectsUI(); updateModeButtons(); wireEvents(); if (!loadQuizState()) { renderQuiz(); renderNav(); updateScore(); } updateTimerDisplay(); }
 
-            let questionBank = normalizeBank(decodeEmbeddedBank() || loadJson(BANK_KEY, null) || buildDefaultBank());
+            // ---------- IMPORTANT: localStorage priority over embedded bank ----------
+            let savedBank = loadJson(BANK_KEY, null);
+            let embeddedBank = decodeEmbeddedBank();
+            let questionBank = normalizeBank(savedBank || embeddedBank || buildDefaultBank());
+
             let selectedKeys = new Set(loadJson(SELECTED_KEY, defaultSubjects.map(s => s.key)));
             let currentQuestions = [], userAnswers = [], answerStatus = [], currentIndex = 0, totalQuestions = 0;
             let isEditUnlocked = false;
