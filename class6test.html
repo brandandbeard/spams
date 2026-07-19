@@ -378,7 +378,6 @@
                         <input type="number" id="timeLimit" value="30" min="1" max="300" style="width:55px;">
                         <button id="generateBtn">✅ Seq</button>
                         <button id="randomBtn" style="background: var(--orange);">🎲 Rnd</button>
-                        <button id="aiGenerateBtn" style="background: var(--accent);">🤖 AI Quiz</button>
                     </div>
                 </div>
                 <div class="chapter-panel" id="chapterPanel">
@@ -466,7 +465,7 @@
         })();
 
         (function() {
-            const APP_VERSION = "class_vi_exam_quiz_v15_silent_ai";
+            const APP_VERSION = "class_vi_exam_quiz_v16_silent_only";
             const BANK_KEY = "CLASS_VI_QUIZ_BANK_" + APP_VERSION;
             const SESSION_KEY = "CLASS_VI_QUIZ_SESSION_" + APP_VERSION;
             const SELECTED_KEY = "CLASS_VI_QUIZ_SELECTED_" + APP_VERSION;
@@ -623,7 +622,7 @@
                 document.getElementById('resultsMessage').textContent = message;
                 document.getElementById('resultsScore').textContent = score + '/' + totalQuestions;
                 const banner = document.getElementById('resultsBanner');
-                if (banner) banner.textContent = (quizGeneratedBy === 'ai' ? '🤖 AI Generated Quiz' : (quizGeneratedBy === 'random' ? '🎲 Random Test' : '✅ Sequential Test')) + (quizTimeLimit ? ' • ' + quizTimeLimit + ' min' : '');
+                if (banner) banner.textContent = (quizGeneratedBy === 'random' ? '🎲 Random Test' : '✅ Sequential Test') + (quizTimeLimit ? ' • ' + quizTimeLimit + ' min' : '');
                 document.getElementById('resCorrect').textContent = c;
                 document.getElementById('resWrong').textContent = w;
                 document.getElementById('resSkipped').textContent = s;
@@ -893,83 +892,12 @@
             }
             window.autoLoadSheetIfNeeded = autoLoadSheetIfNeeded;
 
-            // AI GENERATE BUTTON LOGIC
-            async function generateAIQuiz() {
-                const selected = getSelectedKeys();
-                if (!selected.length) { alert("Please select at least one chapter first."); return; }
-                const btn = $("aiGenerateBtn");
-                const originalText = btn.innerHTML;
-                btn.innerHTML = "⏳ AI Thinking...";
-                btn.disabled = true;
-
-                const subjects = getSubjects().filter(s => selected.includes(s.key));
-                const chapterNames = subjects.map(s => s.name).join(", ");
-
-                try {
-                    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                        method: "POST",
-                        headers: {
-                            "Authorization": `Bearer ${API_KEY}`,
-                            "Content-Type": "application/json",
-                            "HTTP-Referer": window.location.href,
-                            "X-Title": "WBBSE Quiz Generator"
-                        },
-                        body: JSON.stringify({
-                            model: "google/gemma-2-9b-it:free",
-                            messages: [
-                                {
-                                    role: "system",
-                                    content: "You are an expert teacher for Class 6 WBBSE (West Bengal Board). Generate exactly 5 high-quality multiple-choice questions based on the provided chapters. Return ONLY a valid JSON array. Each object must have: 'q' (string), 'o' (array of 4 strings), 'a' (integer 0-3), 'note' (explanation with a source like 'WBBSE Book' or 'YouTube'), 'difficulty' ('easy'|'medium'|'hard')."
-                                },
-                                {
-                                    role: "user",
-                                    content: `Chapters: ${chapterNames}`
-                                }
-                            ],
-                            temperature: 0.7
-                        })
-                    });
-                    const data = await response.json();
-                    if (data.error) throw new Error(data.error.message);
-                    
-                    let content = data.choices[0].message.content;
-                    const jsonMatch = content.match(/\[[\s\S]*\]/);
-                    if (!jsonMatch) throw new Error("Invalid JSON response from AI");
-                    
-                    const aiQuestions = JSON.parse(jsonMatch[0]);
-                    const formattedQuestions = aiQuestions.map((q, i) => ({
-                        q: q.q, o: q.o, a: q.a, note: q.note, difficulty: q.difficulty || "medium",
-                        _subject: "ai_generated", _chapterName: "AI: " + chapterNames, _groupName: "🤖 AI Quiz"
-                    }));
-
-                    currentQuestions = formattedQuestions;
-                    totalQuestions = currentQuestions.length;
-                    userAnswers = new Array(totalQuestions).fill(null);
-                    answerStatus = new Array(totalQuestions).fill(false);
-                    currentIndex = 0; quizSubmitted = false; optionsVisible = true;
-                    quizGeneratedBy = 'ai';
-                    quizTimeLimit = parseInt($("timeLimit").value) || 10;
-                    
-                    stopTimer(); timeRemaining = null; timerActive = false;
-                    if(quizMode === "mock") { timeRemaining = quizTimeLimit * 60; startTimer(timeRemaining); }
-                    
-                    renderQuiz(); renderNav(); updateScore(); updateTimerDisplay(); saveQuizState();
-                } catch (e) {
-                    console.error(e);
-                    alert("AI Generation failed. Please check internet and try again.");
-                } finally {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }
-            }
-
             function wireEvents() {
                 $("chapterToggleBtn").onclick = () => $("chapterPanel").classList.toggle("open");
                 $("selectAllBtn").onclick = () => { selectedKeys = new Set(getSubjects().map(s=>s.key)); populateSubjectsUI(); saveSelection(); };
                 $("deselectAllBtn").onclick = () => { selectedKeys.clear(); populateSubjectsUI(); saveSelection(); };
                 $("generateBtn").onclick = () => generateQuiz(getSelectedKeys(), Number($("quizSize").value), false);
                 $("randomBtn").onclick = () => generateQuiz(getSelectedKeys(), Number($("quizSize").value), true);
-                $("aiGenerateBtn").onclick = generateAIQuiz;
                 $("syncHeaderBtn").onclick = () => syncFromSheet(SHEET_TSV_URL); // Single silent sync button
                 $("resetHeaderBtn").onclick = resetAnswers;
                 $("showScoreBtn").onclick = () => {
