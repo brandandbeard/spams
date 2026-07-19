@@ -343,6 +343,7 @@
         .error-msg { color: #ff4444; font-size: 0.85rem; min-height: 22px; }
         @keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
         .shake { animation: shake 0.5s ease-in-out; }
+        .status-msg { min-height: 24px; margin-top: 8px; font-size: 13px; text-align: center; font-weight: 500; color: var(--muted); }
     </style>
 </head>
 <body>
@@ -419,6 +420,7 @@
                         </div>
                     </div>
                 </div>
+                <div id="sheetLoadStatus" class="status-msg"></div>
             </section>
             <section class="quiz-panel">
                 <div class="questions-area" id="questionsArea">⬆️ Select subjects and click Generate</div>
@@ -495,7 +497,6 @@
                 submitBtn.textContent = '✅ খুলছে...';
                 setTimeout(() => {
                     overlay.classList.add('hidden');
-                    // পাসওয়ার্ড দেওয়ার পর অটোমেটিক শিট থেকে প্রশ্ন লোড করা হবে (যদি ব্যাংক খালি থাকে)
                     if (typeof autoLoadSheetIfNeeded === 'function') autoLoadSheetIfNeeded();
                 }, 400);
             }
@@ -517,7 +518,7 @@
         // 2. MAIN APPLICATION
         // ======================================================================
         (function() {
-            const APP_VERSION = "class_vi_exam_quiz_v13";
+            const APP_VERSION = "class_vi_exam_quiz_v14";
             const BANK_KEY = "CLASS_VI_QUIZ_BANK_" + APP_VERSION;
             const SESSION_KEY = "CLASS_VI_QUIZ_SESSION_" + APP_VERSION;
             const SELECTED_KEY = "CLASS_VI_QUIZ_SELECTED_" + APP_VERSION;
@@ -878,8 +879,14 @@
             function resetAnswers() { quizSubmitted = false; optionsVisible = true; userAnswers.fill(null); answerStatus.fill(false); currentIndex=0; stopTimer(); timeRemaining=null; timerActive=false; quizGeneratedBy = null; quizTimeLimit = null; if(quizMode==="mock"){ const tl=parseInt($("timeLimit").value)||30; timeRemaining=tl*60; startTimer(timeRemaining); } renderQuiz(); renderNav(); updateScore(); updateTimerDisplay(); saveQuizState(); }
             function submitMockTest() { if(!confirm("Mock test submit করবেন? এরপর আর উত্তর পরিবর্তন করতে পারবেন না।")) return; stopTimer(); quizSubmitted = true; renderQuiz(); renderNav(); updateScore(); saveQuizState(); fireConfetti(); showResultsOverlay(); }
 
-            // ---- GOOGLE SHEETS LOADER ----
-            function normalizeNameForMatch(name) { return name.replace(/[\u{1F000}-\u{1FFFF}]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase(); }
+            // ---- IMPROVED SMART SHEET LOADER (no duplicates, robust matching) ----
+            function smartNormalizeName(name) {
+                return name.normalize('NFC')
+                    .replace(/[\s\p{P}\p{S}]+/gu, ' ')  // যতিচিহ্ন, স্পেস এক জায়গায়
+                    .replace(/\s+/g, ' ')
+                    .trim()
+                    .toLowerCase();
+            }
             function loadFromSheet(url) {
                 if (!url) url = SHEET_TSV_URL;
                 if (!url) return;
@@ -898,8 +905,10 @@
                         if (rows.length < 2) throw new Error('Sheet appears empty or header only.');
                         const dataRows = rows.slice(1);
                         let added = 0, skipped = 0;
+                        let newGroups = 0, newChapters = 0;
                         const groups = getSubjectGroups();
                         const subjects = getSubjects();
+
                         for (const row of dataRows) {
                             const cols = row.split('\t').map(c => c.trim());
                             if (cols.length < 8) { skipped++; continue; }
@@ -917,36 +926,41 @@
                             if (correctIdx < 0 || correctIdx > 3) { skipped++; continue; }
                             const explanation = cols.length > 8 ? cols[8] : '';
                             const difficulty = cols.length > 9 ? cols[9].toLowerCase() : 'medium';
-                            const groupNorm = normalizeNameForMatch(groupNameRaw);
-                            let group = groups.find(g => normalizeNameForMatch(g.name) === groupNorm);
+
+                            const groupNorm = smartNormalizeName(groupNameRaw);
+                            let group = groups.find(g => smartNormalizeName(g.name) === groupNorm);
                             let groupKey;
-                            if (group) { groupKey = group.key; }
-                            else {
-                                let newKey = groupNameRaw.toLowerCase().replace(/[^a-z0-9\u0980-\u09FF]/g, '_');
+                            if (!group) {
+                                let newKey = groupNameRaw.toLowerCase().replace(/[^a-z0-9\u0980-\u09FF]/g, '_').replace(/_+/g, '_');
                                 let counter = 1, baseKey = newKey;
                                 while (groups.find(g => g.key === newKey)) { newKey = baseKey + '_' + (counter++); }
-                                questionBank.__subjectGroups__.push({ key: newKey, name: groupNameRaw, className: '' });
-                                groupKey = newKey;
-                                groups.push({ key: newKey, name: groupNameRaw, className: '' });
+                                group = { key: newKey, name: groupNameRaw, className: '' };
+                                questionBank.__subjectGroups__.push(group);
+                                groups.push(group);
+                                newGroups++;
                             }
-                            const chapterNorm = normalizeNameForMatch(chapterNameRaw);
-                            let chapter = subjects.find(s => s.group === groupKey && normalizeNameForMatch(s.name) === chapterNorm);
+                            groupKey = group.key;
+
+                            const chapterNorm = smartNormalizeName(chapterNameRaw);
+                            let chapter = subjects.find(s => s.group === groupKey && smartNormalizeName(s.name) === chapterNorm);
                             let chapterKey;
-                            if (chapter) { chapterKey = chapter.key; }
-                            else {
-                                let newKey = chapterNameRaw.toLowerCase().replace(/[^a-z0-9\u0980-\u09FF]/g, '_') + '_' + groupKey;
+                            if (!chapter) {
+                                let newKey = chapterNameRaw.toLowerCase().replace(/[^a-z0-9\u0980-\u09FF]/g, '_').replace(/_+/g, '_') + '_' + groupKey;
                                 let counter = 1, baseKey = newKey;
                                 while (subjects.find(s => s.key === newKey)) { newKey = baseKey + '_' + (counter++); }
-                                questionBank.__subjects__.push({ key: newKey, group: groupKey, name: chapterNameRaw, num: questionBank.__subjects__.length + 1 });
+                                chapter = { key: newKey, group: groupKey, name: chapterNameRaw, num: questionBank.__subjects__.length + 1 };
+                                questionBank.__subjects__.push(chapter);
                                 questionBank[newKey] = [];
-                                chapterKey = newKey;
-                                subjects.push({ key: newKey, group: groupKey, name: chapterNameRaw, num: questionBank.__subjects__.length });
+                                subjects.push(chapter);
+                                newChapters++;
                             }
+                            chapterKey = chapter.key;
+
                             const q = normalizeQuestion({ q: qText, o: opts, a: correctIdx, note: explanation, difficulty: difficulty });
                             if (q) { questionBank[chapterKey].push(q); added++; } else { skipped++; }
                         }
                         saveBank();
-                        const msg = `✅ ${added}টি প্রশ্ন লোড হয়েছে।${skipped?` ${skipped}টি row skip হয়েছে।`:''}`;
+                        const msg = `✅ ${added} প্রশ্ন যোগ হয়েছে।${newGroups?` নতুন সাবজেক্ট: ${newGroups},` : ''}${newChapters?` নতুন চ্যাপ্টার: ${newChapters},` : ''}${skipped?` skip: ${skipped}` : ''}`;
                         if (statusEl) { statusEl.innerHTML = msg; statusEl.style.color = 'var(--green)'; }
                         populateSubjectsUI();
                     })
@@ -956,7 +970,6 @@
                     });
             }
 
-            // অটো-লোড: পাসওয়ার্ড দেওয়ার পর যদি ব্যাংকে কোনো প্রশ্ন না থাকে, তবে শিট থেকে লোড করবে
             function autoLoadSheetIfNeeded() {
                 const totalQ = getSubjects().reduce((sum, s) => sum + getCount(s.key), 0);
                 if (totalQ === 0 && SHEET_TSV_URL) {
