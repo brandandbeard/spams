@@ -7,65 +7,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class VI || Practice & Mock Test</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         /* ===== CSS (আগের মতোই, সম্পূর্ণ অপরিবর্তিত) ===== */
         :root {
-            --bg: #f0f4fa;
-            --ink: #1a1e2b;
-            --muted: #5f6b7a;
-            --card: #ffffff;
-            --line: #dce3ed;
-            --primary: #1a56db;
-            --primary-dark: #1240a0;
-            --accent: #7c3aed;
-            --orange: #ea580c;
-            --green: #0d9488;
-            --red: #dc2626;
-            --gold: #f59e0b;
-            --slate: #475569;
-            --shadow: 0 18px 48px rgba(15, 23, 42, 0.13);
-            --radius: 20px;
-            --header-bg: linear-gradient(135deg, #1e293b, #1a1e2b);
-            --header-color: #fff;
+            --bg: #f0f4fa; --ink: #1a1e2b; --muted: #5f6b7a; --card: #ffffff; --line: #dce3ed;
+            --primary: #1a56db; --primary-dark: #1240a0; --accent: #7c3aed; --orange: #ea580c;
+            --green: #0d9488; --red: #dc2626; --gold: #f59e0b; --slate: #475569;
+            --shadow: 0 18px 48px rgba(15, 23, 42, 0.13); --radius: 20px;
+            --header-bg: linear-gradient(135deg, #1e293b, #1a1e2b); --header-color: #fff;
             --body-gradient: radial-gradient(circle at top left, rgba(26,86,219,0.10), transparent 30rem),
                 radial-gradient(circle at right 20%, rgba(124,58,237,0.09), transparent 24rem),
                 linear-gradient(135deg, rgba(26,86,219,0.04) 25%, transparent 25%) 0 0 / 32px 32px, var(--bg);
         }
         [data-theme="dark"] {
-            --bg: #0f172a;
-            --ink: #e2e8f0;
-            --muted: #94a3b8;
-            --card: #1e293b;
-            --line: #334155;
-            --primary: #60a5fa;
-            --primary-dark: #3b82f6;
-            --accent: #a78bfa;
-            --orange: #f97316;
-            --green: #2dd4bf;
-            --red: #f87171;
-            --gold: #fbbf24;
-            --slate: #94a3b8;
-            --shadow: 0 18px 48px rgba(0, 0, 0, 0.4);
-            --header-bg: linear-gradient(135deg, #0f172a, #1e293b);
-            --header-color: #e2e8f0;
-            --body-gradient: linear-gradient(145deg, #0f172a, #1e293b);
+            --bg: #0f172a; --ink: #e2e8f0; --muted: #94a3b8; --card: #1e293b; --line: #334155;
+            --primary: #60a5fa; --primary-dark: #3b82f6; --accent: #a78bfa; --orange: #f97316;
+            --green: #2dd4bf; --red: #f87171; --gold: #fbbf24; --slate: #94a3b8;
+            --shadow: 0 18px 48px rgba(0, 0, 0, 0.4); --header-bg: linear-gradient(135deg, #0f172a, #1e293b);
+            --header-color: #e2e8f0; --body-gradient: linear-gradient(145deg, #0f172a, #1e293b);
         }
         * { box-sizing: border-box; letter-spacing: 0; margin: 0; padding: 0; }
         html, body { min-height: 100%; }
         body {
-            margin: 0; padding: 16px;
-            color: var(--ink);
+            margin: 0; padding: 16px; color: var(--ink);
             font-family: "Segoe UI", "Hind Siliguri", "Noto Sans Bengali", system-ui, sans-serif;
-            background: var(--body-gradient);
-            background-attachment: fixed;
+            background: var(--body-gradient); background-attachment: fixed;
         }
         button, input, select, textarea { font: inherit; }
         button {
-            border: 0; border-radius: 999px; padding: 7px 15px;
-            cursor: pointer; color: #fff; background: var(--primary);
-            font-weight: 500; font-size: 13px;
+            border: 0; border-radius: 999px; padding: 7px 15px; cursor: pointer; color: #fff;
+            background: var(--primary); font-weight: 500; font-size: 13px;
             transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
             white-space: nowrap;
         }
@@ -114,7 +86,6 @@
             cursor: pointer; user-select: none; transition: background 0.2s, color 0.2s;
             background: transparent; color: var(--ink);
         }
-        [data-theme="dark"] .subject-header { background: transparent; color: var(--ink); }
         .subject-arrow { transition: transform 0.35s ease; font-size: 12px; }
         .subject-accordion.open .subject-arrow { transform: rotate(180deg); }
         .subject-chapters {
@@ -343,7 +314,6 @@
         .error-msg { color: #ff4444; font-size: 0.85rem; min-height: 22px; }
         @keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
         .shake { animation: shake 0.5s ease-in-out; }
-        .status-msg { min-height: 24px; margin-top: 8px; font-size: 13px; text-align: center; font-weight: 500; color: var(--muted); }
     </style>
 </head>
 <body>
@@ -352,7 +322,7 @@
         <div class="siren-icon-wrapper"><span class="siren-emoji">🚨</span></div>
         <div class="warning-card">
             <span class="warning-label">⚠️ সতর্কতা ⚠️</span>
-            <p class="warning-text"><span class="highlight">ছেলে-মেয়েকে একা মোবাইল ছেড়ে পড়তে দেবেন না।</span><br>যখনই দেবেন, <span class="highlight">অভিভাবক পাশে বসে</span> নজরে রাখবেন।</p>
+            <p class="warning-text"><span class="highlight">ছেলে-মেয়েকে একা মোবাইল ছেড়ে পড়তে দেবেন না।</span><br>যখনই দেবেন, <span class="highlight">অভিভাবক পাশে বসে</span> নজরে রাখবেন।</p>
         </div>
         <div class="password-section">
             <p class="password-label">🔒 কুইজ খুলতে পাসওয়ার্ড লিখুন</p>
@@ -409,6 +379,7 @@
                         <input type="number" id="timeLimit" value="30" min="1" max="300" style="width:65px;">
                         <button id="generateBtn">✅Generate(Seq)</button>
                         <button id="randomBtn" style="background: var(--orange);">🎲Random</button>
+                        <button id="syncSheetBtn" style="background: var(--green);">🔄 Sync Sheet</button>
                     </div>
                 </div>
                 <div class="chapter-panel" id="chapterPanel">
@@ -420,7 +391,6 @@
                         </div>
                     </div>
                 </div>
-                <div id="sheetLoadStatus" class="status-msg"></div>
             </section>
             <section class="quiz-panel">
                 <div class="questions-area" id="questionsArea">⬆️ Select subjects and click Generate</div>
@@ -433,7 +403,7 @@
                     <button id="submitMockBtn" style="display:none; margin-top:8px; width:100%; background:var(--green);">✅ Submit Mock Test</button>
                 </aside>
             </section>
-        </div><!-- end .container -->
+        </div>
 
         <!-- Footer -->
         <div class="footer-contact">
@@ -471,16 +441,10 @@
     </main>
 
     <script>
-        // ========== IMPORTANT: তোমার গুগল শিটের TSV লিংক এখানে বসাও ==========
         const SHEET_TSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTx7-n5ATXwTftgyzPgql2F5E5nPVh8Mrzp2HZQKJ75lPTv8sk4cQb31F8WYkJOlv90I1zKokM42F1Y/pub?output=tsv";
-        // ======================================================================
-
-        // ========== EMBEDDED BANK (আগের মতোই) ==========
         const EMBEDDED_BANK = "";
 
-        // ======================================================================
-        // 1. WARNING OVERLAY (password: 1122)
-        // ======================================================================
+        // 1. WARNING OVERLAY
         (function() {
             const CORRECT_PASSWORD = "1122";
             const overlay = document.getElementById('warningOverlay');
@@ -514,17 +478,16 @@
             pwdInput.focus();
         })();
 
-        // ======================================================================
         // 2. MAIN APPLICATION
-        // ======================================================================
         (function() {
-            const APP_VERSION = "class_vi_exam_quiz_v14";
+            // VERSION UPDATED TO FORCE FRESH SYNC AND CLEAR OLD CACHED DUPLICATES
+            const APP_VERSION = "class_vi_exam_quiz_v14_ai_sync";
             const BANK_KEY = "CLASS_VI_QUIZ_BANK_" + APP_VERSION;
             const SESSION_KEY = "CLASS_VI_QUIZ_SESSION_" + APP_VERSION;
             const SELECTED_KEY = "CLASS_VI_QUIZ_SELECTED_" + APP_VERSION;
             const THEME_KEY = "CLASS_VI_QUIZ_THEME";
+            const LAST_SYNC_KEY = "CLASS_VI_QUIZ_LAST_SYNC_" + APP_VERSION;
 
-            // ---- DEFAULT SUBJECT GROUPS ----
             const defaultSubjectGroups = [
                 { key: "bangla", name: "📖 বাংলা", className: "" },
                 { key: "english", name: "🔤 English", className: "english" },
@@ -534,7 +497,6 @@
                 { key: "bhugol", name: "🌍 ভূগোল", className: "reasoning" }
             ];
 
-            // ---- DEFAULT SUBJECTS (chapters) ----
             const defaultSubjects = [
                 { key: "bangla_sahitya", group: "bangla", name: "বাংলা সাহিত্য", num: 1 },
                 { key: "bangla_byakaran", group: "bangla", name: "বাংলা ব্যাকরণ", num: 2 },
@@ -543,69 +505,22 @@
                 { key: "ganit_arithmetic", group: "ganit", name: "পাটিগণিত", num: 5 },
                 { key: "ganit_algebra", group: "ganit", name: "বীজগণিত", num: 6 },
                 { key: "ganit_geometry", group: "ganit", name: "জ্যামিতি", num: 7 },
-                { key: "poribesh_1", group: "poribesh_bigyan", name: "পরিবেশ ও বিজ্ঞান", num: 8 },
-                { key: "poribesh_2", group: "poribesh_bigyan", name: "পরিবেশ ও জীবজগতের পারস্পরিক নির্ভরতা", num: 9 },
-                { key: "poribesh_3", group: "poribesh_bigyan", name: "আমাদের চারপাশের ঘটনাসমূহ", num: 10 },
-                { key: "poribesh_4", group: "poribesh_bigyan", name: "মৌলিক, যৌগিক ও মিশ্র পদার্থ", num: 11 },
-                { key: "poribesh_5", group: "poribesh_bigyan", name: "শিলা ও খনিজ পদার্থ", num: 12 },
-                { key: "poribesh_6", group: "poribesh_bigyan", name: "মাপজোক বা পরিমাপ", num: 13 },
-                { key: "poribesh_7", group: "poribesh_bigyan", name: "বল ও শক্তির প্রাথমিক ধারণা", num: 14 },
-                { key: "poribesh_8", group: "poribesh_bigyan", name: "তরল ও গ্যাসীয় পদার্থের স্থিতি ও গতি", num: 15 },
-                { key: "poribesh_9", group: "poribesh_bigyan", name: "মানুষের শরীর", num: 16 },
-                { key: "poribesh_10", group: "poribesh_bigyan", name: "সাধারণ যন্ত্রসমূহ", num: 17 },
-                { key: "poribesh_11", group: "poribesh_bigyan", name: "জীববৈচিত্র্য ও তার শ্রেণিবিভাগ", num: 18 },
-                { key: "poribesh_12", group: "poribesh_bigyan", name: "কতকগুলি বিশেষ প্রাণীর বাসস্থান ও আচার-আচরণ", num: 19 },
-                { key: "poribesh_13", group: "poribesh_bigyan", name: "বর্জ্য পদার্থ", num: 20 },
-                { key: "itihas_1", group: "itihas", name: "ইতিহাসের ধারণা", num: 21 },
-                { key: "itihas_2", group: "itihas", name: "ভারতীয় উপমহাদেশে আদিম মানুষ", num: 22 },
-                { key: "itihas_3", group: "itihas", name: "প্রাচীন ইতিহাসের ধারা: প্রথম পর্যায়", num: 23 },
-                { key: "itihas_4", group: "itihas", name: "প্রাচীন ইতিহাসের ধারা: দ্বিতীয় পর্যায়", num: 24 },
-                { key: "itihas_5", group: "itihas", name: "খ্রিস্টপূর্ব ষষ্ঠ শতকের ভারতীয় উপমহাদেশ", num: 25 },
-                { key: "itihas_6", group: "itihas", name: "সাম্রাজ্য বিস্তার ও শাসন", num: 26 },
-                { key: "itihas_7", group: "itihas", name: "অর্থনীতি ও জীবনযাত্রা", num: 27 },
-                { key: "itihas_8", group: "itihas", name: "প্রাচীন ভারতীয় উপমহাদেশের সংস্কৃতি", num: 28 },
-                { key: "itihas_9", group: "itihas", name: "ভারত ও সমকালীন বহির্বিশ্ব", num: 29 },
-                { key: "bhugol_1", group: "bhugol", name: "আকাশ ভরা সূর্য তারা", num: 30 },
-                { key: "bhugol_2", group: "bhugol", name: "পৃথিবী কী গোল", num: 31 },
-                { key: "bhugol_3", group: "bhugol", name: "তুমি কোথায় আছ", num: 32 },
-                { key: "bhugol_4", group: "bhugol", name: "পৃথিবীর আবর্তন", num: 33 },
-                { key: "bhugol_5", group: "bhugol", name: "জল-স্থল-বাতাস", num: 34 },
-                { key: "bhugol_6", group: "bhugol", name: "বরফে ঢাকা মহাদেশ", num: 35 },
-                { key: "bhugol_7", group: "bhugol", name: "আবহাওয়া ও জলবায়ু", num: 36 },
-                { key: "bhugol_8", group: "bhugol", name: "বায়ুদূষণ", num: 37 },
-                { key: "bhugol_9", group: "bhugol", name: "শব্দদূষণ", num: 38 },
-                { key: "bhugol_10", group: "bhugol", name: "আমাদের দেশ ভারত", num: 39 },
-                { key: "bhugol_11", group: "bhugol", name: "মানচিত্র", num: 40 }
+                { key: "poribesh_1", group: "poribesh_bigyan", name: "পরিবেশ ও বিজ্ঞান", num: 8 }
             ];
 
-            const seedQuestions = {}; // শুরুতে প্রশ্ন খালি, গুগল শিট থেকেই আসবে
+            const seedQuestions = {};
 
-            // ---- HELPERS ----
             const $ = id => document.getElementById(id);
             function safeGet(k) { try { return localStorage.getItem(k); } catch { return null; } }
             function safeSet(k, v) { try { localStorage.setItem(k, v); } catch {} }
-            function safeRemove(k) { try { localStorage.removeItem(k); } catch {} }
             function cloneValue(v) { return v === null || v === undefined ? v : typeof structuredClone === "function" ? structuredClone(v) : JSON.parse(JSON.stringify(v)); }
             function escapeHtml(v) { return String(v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch])); }
             function escapeAttr(v){ return escapeHtml(v).replace(/`/g,"&#096;"); }
-            function stamp(){ return new Date().toISOString().slice(0,19).replace(/:/g,"-"); }
 
-            // ---- BANK FUNCTIONS ----
             function buildDefaultBank() {
                 const b = { __subjectGroups__: cloneValue(defaultSubjectGroups), __subjects__: defaultSubjects.map((s,i) => ({...s, num:i+1})) };
                 for (const s of b.__subjects__) b[s.key] = seedQuestions[s.key] ? cloneValue(seedQuestions[s.key]) : [];
                 return b;
-            }
-            function normalizeBank(bank) {
-                if (!bank || typeof bank !== "object") bank = buildDefaultBank();
-                if (!Array.isArray(bank.__subjectGroups__) || bank.__subjectGroups__.length === 0) bank.__subjectGroups__ = cloneValue(defaultSubjectGroups);
-                if (!Array.isArray(bank.__subjects__)) bank.__subjects__ = defaultSubjects.map((s,i) => ({...s, num:i+1}));
-                bank.__subjects__ = bank.__subjects__.map((s,i) => ({ key: String(s.key || ("custom_"+i)), group: s.group || "bangla", name: String(s.name || ("Topic "+(i+1))), num: Number(s.num || i+1) }));
-                for (const s of bank.__subjects__) {
-                    if (!Array.isArray(bank[s.key])) bank[s.key] = [];
-                    bank[s.key] = bank[s.key].map(normalizeQuestion).filter(Boolean);
-                }
-                return bank;
             }
             function normalizeQuestion(q) {
                 if (!q) return null;
@@ -622,13 +537,9 @@
             function groupLabel(gk) { const groups = getSubjectGroups(), found = groups.find(g => g.key === gk); return found ? found.name.replace(/^[^\s]+ /,"") : gk; }
             function getQuestionRef(sk, idx) { const s = getSubjects().find(x => x.key === sk), q = questionBank[sk]?.[idx]; if (!s || !q) return null; return { ...q, _subject: sk, _index: idx, _chapterName: s.name, _groupName: groupLabel(s.group) }; }
 
-            // ---- SAVE FUNCTIONS ----
             function saveBank() {
                 safeSet(BANK_KEY, JSON.stringify(questionBank));
-                try {
-                    const bankJson = JSON.stringify(questionBank);
-                    window.EMBEDDED_BANK = btoa(unescape(encodeURIComponent(bankJson)));
-                } catch(e) { console.warn("Could not update EMBEDDED_BANK", e); }
+                try { window.EMBEDDED_BANK = btoa(unescape(encodeURIComponent(JSON.stringify(questionBank)))); } catch(e) {}
                 populateSubjectsUI();
             }
             function saveSelection() { safeSet(SELECTED_KEY, JSON.stringify([...selectedKeys])); }
@@ -640,7 +551,6 @@
                 updateModeButtons(); if (quizMode === "mock" && timerActive && timeRemaining !== null && timeRemaining > 0) { startTimer(timeRemaining); }
                 renderQuiz(); renderNav(); updateScore(); return true; }
 
-            // ---- রোটেটিং কালার ----
             const SUBJECT_COLORS = ['#f59e0b','#8b5cf6','#ec4899','#3b82f6','#22c55e','#f97316'];
             const SUBJECT_COLORS_DARK = ['#fbbf24','#a78bfa','#f472b6','#60a5fa','#4ade80','#fb923c'];
             function getSubjectColor(index, isDark) {
@@ -648,7 +558,6 @@
                 return colors[index % colors.length];
             }
 
-            // ---- POPULATE UI ----
             function populateSubjectsUI() {
                 const groups = getSubjectGroups();
                 const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -672,24 +581,20 @@
                 document.querySelectorAll(".chapter-cb").forEach(cb => { cb.onchange = () => { cb.checked ? selectedKeys.add(cb.value) : selectedKeys.delete(cb.value); saveSelection(); }; });
             }
 
-            // ---- SHUFFLE & COLLECT ----
             function shuffle(arr) { const c = [...arr]; for(let i=c.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [c[i],c[j]] = [c[j],c[i]]; } return c; }
             function shuffleOptions(q) { const o = shuffle([0,1,2,3]); return { ...q, o: o.map(i => q.o[i]), a: o.indexOf(q.a) }; }
             function collectQuestions(ks) { const all = []; for(const k of ks) (questionBank[k]||[]).forEach((_,i)=>{ const r = getQuestionRef(k,i); if(r) all.push(r); }); return all; }
 
-            // ---- GENERATE QUIZ ----
             function generateQuiz(ks, sz, rnd=false) {
                 if(!ks.length) ks = getSubjects().map(s=>s.key);
                 let sel = collectQuestions(ks);
-                if(!sel.length) { alert("No questions! প্রথমে গুগল শিট থেকে প্রশ্ন লোড করুন (পাসওয়ার্ড দেওয়ার পর অটো-লোড হবে)।"); return; }
+                if(!sel.length) { alert("No questions! প্রথমে গুগল শিট থেকে প্রশ্ন লোড করুন।"); return; }
                 if(rnd) sel = shuffle(sel);
                 currentQuestions = sel.slice(0, Math.max(1, sz || 25)).map(shuffleOptions);
                 totalQuestions = currentQuestions.length;
                 userAnswers = new Array(totalQuestions).fill(null);
                 answerStatus = new Array(totalQuestions).fill(false);
-                currentIndex = 0;
-                quizSubmitted = false;
-                optionsVisible = true;
+                currentIndex = 0; quizSubmitted = false; optionsVisible = true;
                 quizGeneratedBy = rnd ? 'random' : 'seq';
                 quizTimeLimit = parseInt($("timeLimit").value) || 30;
                 stopTimer(); timeRemaining = null; timerActive = false;
@@ -697,20 +602,15 @@
                 renderQuiz(); renderNav(); updateScore(); updateTimerDisplay(); saveQuizState();
             }
 
-            // ---- TIMER ----
             let timerInterval = null, timeRemaining = null, timerActive = false;
             function startTimer(seconds){
-                stopTimer();
-                timeRemaining = seconds; timerActive = true;
-                updateTimerDisplay();
+                stopTimer(); timeRemaining = seconds; timerActive = true; updateTimerDisplay();
                 timerInterval = setInterval(() => {
-                    timeRemaining--;
-                    updateTimerDisplay();
+                    timeRemaining--; updateTimerDisplay();
                     if (timeRemaining <= 0) {
                         stopTimer();
                         if (quizMode === "mock") {
-                            quizSubmitted = true;
-                            renderQuiz(); renderNav(); updateScore(); saveQuizState();
+                            quizSubmitted = true; renderQuiz(); renderNav(); updateScore(); saveQuizState();
                             fireConfetti(); showResultsOverlay();
                         }
                     }
@@ -730,7 +630,6 @@
             function updateModeButtons() { document.querySelectorAll('.mode-btn').forEach(b=>{ b.classList.toggle('active', b.dataset.mode===quizMode); }); }
             function setQuizMode(mode) { quizMode=mode; updateModeButtons(); stopTimer(); timeRemaining=null; timerActive=false; quizSubmitted = false; optionsVisible = true; updateTimerDisplay(); if(currentQuestions.length>0 && mode==="mock"){ const tl=parseInt($("timeLimit").value)||30; timeRemaining=tl*60; startTimer(timeRemaining); } saveQuizState(); }
 
-            // ---- CONFETTI & RESULTS ----
             function fireConfetti() { const count=500; const defaults={spread:360,ticks:80,gravity:0.6,decay:0.9,startVelocity:30}; for(let i=0;i<5;i++) confetti({...defaults,particleCount:count/5,origin:{x:Math.random(),y:Math.random()*0.5}}); }
             function showResultsOverlay() {
                 const c = answerStatus.filter(Boolean).length;
@@ -783,7 +682,6 @@
             }
             function hideResultsOverlay() { document.getElementById('resultsOverlay').classList.add('hidden'); }
 
-            // ---- RENDER QUIZ ----
             function renderQuiz() {
                 if(!currentQuestions.length) { $("questionsArea").innerHTML = "<div class='question-card' style='text-align:center;padding:50px;'>⬆️ Select subjects and click Generate</div>"; return; }
                 currentIndex = Math.max(0, Math.min(currentIndex, currentQuestions.length-1));
@@ -820,9 +718,7 @@
                     </div>
                 </div>`;
                 document.querySelectorAll(".option").forEach(el => { el.onclick = () => {
-                    if (quizSubmitted) return;
-                    if (!optionsVisible) return;
-                    if (quizMode === "mock") { if (userAnswers[currentIndex] !== null) return; } else { if (userAnswers[currentIndex] !== null) return; }
+                    if (quizSubmitted || !optionsVisible || userAnswers[currentIndex] !== null) return;
                     const sel = Number(el.dataset.opt);
                     userAnswers[currentIndex] = sel;
                     answerStatus[currentIndex] = (sel === q.a);
@@ -879,39 +775,90 @@
             function resetAnswers() { quizSubmitted = false; optionsVisible = true; userAnswers.fill(null); answerStatus.fill(false); currentIndex=0; stopTimer(); timeRemaining=null; timerActive=false; quizGeneratedBy = null; quizTimeLimit = null; if(quizMode==="mock"){ const tl=parseInt($("timeLimit").value)||30; timeRemaining=tl*60; startTimer(timeRemaining); } renderQuiz(); renderNav(); updateScore(); updateTimerDisplay(); saveQuizState(); }
             function submitMockTest() { if(!confirm("Mock test submit করবেন? এরপর আর উত্তর পরিবর্তন করতে পারবেন না।")) return; stopTimer(); quizSubmitted = true; renderQuiz(); renderNav(); updateScore(); saveQuizState(); fireConfetti(); showResultsOverlay(); }
 
-            // ---- IMPROVED SMART SHEET LOADER (no duplicates, robust matching) ----
-            function smartNormalizeName(name) {
-                return name.normalize('NFC')
-                    .replace(/[\s\p{P}\p{S}]+/gu, ' ')  // যতিচিহ্ন, স্পেস এক জায়গায়
-                    .replace(/\s+/g, ' ')
-                    .trim()
-                    .toLowerCase();
+            // ==========================================
+            // AI & SMART DEDUPLICATION LOGIC
+            // ==========================================
+            function strictLocalNormalize(name) {
+                if (!name) return "";
+                return name
+                    .replace(/[\u{1F000}-\u{1FFFF}]/gu, '') // remove emojis
+                    .replace(/[^\w\u0980-\u09FF]/g, '') // remove ALL spaces, punctuation, keep only alphanumeric and Bengali
+                    .toLowerCase()
+                    .trim();
             }
-            function loadFromSheet(url) {
-                if (!url) url = SHEET_TSV_URL;
-                if (!url) return;
-                const statusEl = document.getElementById('sheetLoadStatus');
-                if (statusEl) {
-                    statusEl.innerHTML = '⏳ গুগল শিট থেকে প্রশ্ন লোড হচ্ছে...';
-                    statusEl.style.color = 'var(--muted)';
+
+            async function getCanonicalMappings(rawGroups, rawChaptersMap) {
+                const payload = {
+                    groups: Array.from(rawGroups),
+                    chapters: {}
+                };
+                for (const [gk, chapters] of rawChaptersMap) {
+                    payload.chapters[gk] = Array.from(chapters);
                 }
+                
+                const apiKey = "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";
+                try {
+                    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${apiKey}`,
+                            "Content-Type": "application/json",
+                            "HTTP-Referer": window.location.href,
+                            "X-Title": "Quiz App Deduplication"
+                        },
+                        body: JSON.stringify({
+                            model: "mistralai/mistral-7b-instruct:free",
+                            messages: [
+                                { 
+                                    role: "system", 
+                                    content: "You are a data cleaning assistant. You will receive a JSON object with 'groups' (subject names) and 'chapters' (mapped to group keys). Some names have duplicates due to extra spaces, punctuation, or slight spelling variations (especially in Bengali). Return a JSON object with the EXACT SAME STRUCTURE, but replace every name with its standardized, canonical version (trim spaces, remove extra punctuation, standardize spelling). Return ONLY valid JSON, no markdown, no explanations." 
+                                },
+                                { role: "user", content: JSON.stringify(payload) }
+                            ],
+                            temperature: 0.1
+                        })
+                    });
+                    const data = await response.json();
+                    if (data.error) throw new Error(data.error.message);
+                    const content = data.choices[0].message.content;
+                    const jsonStr = content.replace(/```json\n?|\n?```/g, '').trim();
+                    return JSON.parse(jsonStr);
+                } catch (e) {
+                    console.warn("AI normalization failed, falling back to strict local normalization", e);
+                    return null;
+                }
+            }
+
+            function syncFromSheet(url) {
+                if (!url) return;
+                let statusEl = document.getElementById('sheetLoadStatus');
+                if (!statusEl) {
+                    const div = document.createElement('div');
+                    div.id = 'sheetLoadStatus';
+                    div.style.cssText = 'text-align:center; padding:10px; font-weight:600;';
+                    document.querySelector('.controls').prepend(div);
+                    statusEl = document.getElementById('sheetLoadStatus');
+                }
+                statusEl.innerHTML = '⏳ AI দিয়ে ডুপ্লিকেট চেক করে শিট সিঙ্ক হচ্ছে...';
+                statusEl.style.color = 'var(--orange)';
+                
                 fetch(url, { mode: 'cors' })
                     .then(res => {
-                        if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
                         return res.text();
                     })
-                    .then(tsv => {
+                    .then(async tsv => {
                         const rows = tsv.split(/\r?\n/).filter(line => line.trim() !== '');
-                        if (rows.length < 2) throw new Error('Sheet appears empty or header only.');
+                        if (rows.length < 2) throw new Error('Sheet empty');
+                        
                         const dataRows = rows.slice(1);
-                        let added = 0, skipped = 0;
-                        let newGroups = 0, newChapters = 0;
-                        const groups = getSubjectGroups();
-                        const subjects = getSubjects();
+                        const rawGroups = new Set();
+                        const rawChaptersMap = new Map();
+                        const parsedRows = [];
 
                         for (const row of dataRows) {
                             const cols = row.split('\t').map(c => c.trim());
-                            if (cols.length < 8) { skipped++; continue; }
+                            if (cols.length < 8) continue;
                             const groupNameRaw = cols[0] || 'সাধারণ';
                             const chapterNameRaw = cols[1] || 'অশ্রেণীবদ্ধ';
                             const qText = cols[2];
@@ -921,70 +868,148 @@
                                 const map = { 'A':0, 'B':1, 'C':2, 'D':3, 'a':0, 'b':1, 'c':2, 'd':3 };
                                 const letter = cols[7].trim().toUpperCase();
                                 if (letter in map) correctIdx = map[letter];
-                                else { skipped++; continue; }
+                                else continue;
                             }
-                            if (correctIdx < 0 || correctIdx > 3) { skipped++; continue; }
+                            if (correctIdx < 0 || correctIdx > 3) continue;
                             const explanation = cols.length > 8 ? cols[8] : '';
                             const difficulty = cols.length > 9 ? cols[9].toLowerCase() : 'medium';
-
-                            const groupNorm = smartNormalizeName(groupNameRaw);
-                            let group = groups.find(g => smartNormalizeName(g.name) === groupNorm);
-                            let groupKey;
-                            if (!group) {
-                                let newKey = groupNameRaw.toLowerCase().replace(/[^a-z0-9\u0980-\u09FF]/g, '_').replace(/_+/g, '_');
-                                let counter = 1, baseKey = newKey;
-                                while (groups.find(g => g.key === newKey)) { newKey = baseKey + '_' + (counter++); }
-                                group = { key: newKey, name: groupNameRaw, className: '' };
-                                questionBank.__subjectGroups__.push(group);
-                                groups.push(group);
-                                newGroups++;
-                            }
-                            groupKey = group.key;
-
-                            const chapterNorm = smartNormalizeName(chapterNameRaw);
-                            let chapter = subjects.find(s => s.group === groupKey && smartNormalizeName(s.name) === chapterNorm);
-                            let chapterKey;
-                            if (!chapter) {
-                                let newKey = chapterNameRaw.toLowerCase().replace(/[^a-z0-9\u0980-\u09FF]/g, '_').replace(/_+/g, '_') + '_' + groupKey;
-                                let counter = 1, baseKey = newKey;
-                                while (subjects.find(s => s.key === newKey)) { newKey = baseKey + '_' + (counter++); }
-                                chapter = { key: newKey, group: groupKey, name: chapterNameRaw, num: questionBank.__subjects__.length + 1 };
-                                questionBank.__subjects__.push(chapter);
-                                questionBank[newKey] = [];
-                                subjects.push(chapter);
-                                newChapters++;
-                            }
-                            chapterKey = chapter.key;
-
-                            const q = normalizeQuestion({ q: qText, o: opts, a: correctIdx, note: explanation, difficulty: difficulty });
-                            if (q) { questionBank[chapterKey].push(q); added++; } else { skipped++; }
+                            
+                            parsedRows.push({ groupNameRaw, chapterNameRaw, qText, opts, correctIdx, explanation, difficulty });
+                            rawGroups.add(groupNameRaw);
+                            if (!rawChaptersMap.has(groupNameRaw)) rawChaptersMap.set(groupNameRaw, new Set());
+                            rawChaptersMap.get(groupNameRaw).add(chapterNameRaw);
                         }
+
+                        let canonicalMap = await getCanonicalMappings(rawGroups, rawChaptersMap);
+                        
+                        const groupMap = {};
+                        const chapterMap = {};
+                        
+                        if (canonicalMap) {
+                            canonicalMap.groups.forEach((canonical, i) => {
+                                groupMap[Array.from(rawGroups)[i]] = canonical;
+                            });
+                            for (const [rawGroup, chapters] of Object.entries(canonicalMap.chapters)) {
+                                chapterMap[rawGroup] = {};
+                                const rawChapterList = Array.from(rawChaptersMap.get(rawGroup) || []);
+                                chapters.forEach((canonical, i) => {
+                                    chapterMap[rawGroup][rawChapterList[i]] = canonical;
+                                });
+                            }
+                        } else {
+                            const localGroupMap = {};
+                            rawGroups.forEach(raw => {
+                                const norm = strictLocalNormalize(raw);
+                                if (!localGroupMap[norm]) localGroupMap[norm] = raw;
+                                groupMap[raw] = localGroupMap[norm];
+                            });
+                            for (const [rawGroup, rawChapters] of rawChaptersMap) {
+                                chapterMap[rawGroup] = {};
+                                const localChapterMap = {};
+                                rawChapters.forEach(raw => {
+                                    const norm = strictLocalNormalize(raw);
+                                    if (!localChapterMap[norm]) localChapterMap[norm] = raw;
+                                    chapterMap[rawGroup][raw] = localChapterMap[norm];
+                                });
+                            }
+                        }
+
+                        const newBank = { __subjectGroups__: [], __subjects__: [] };
+                        const groupKeyMap = {};
+                        const chapterKeyMap = {};
+
+                        let groupNum = 1;
+                        const uniqueCanonicalGroups = [...new Set(Object.values(groupMap))];
+                        for (const canonicalGroup of uniqueCanonicalGroups) {
+                            const key = canonicalGroup.toLowerCase().replace(/[^a-z0-9\u0980-\u09FF]/g, '_') + '_g';
+                            groupKeyMap[canonicalGroup] = key;
+                            newBank.__subjectGroups__.push({ key, name: canonicalGroup, className: '', num: groupNum++ });
+                        }
+
+                        let chapterNum = 1;
+                        const canonicalGroupToChapters = new Map();
+                        for (const rawGroup of rawGroups) {
+                            const canonicalGroup = groupMap[rawGroup];
+                            if (!canonicalGroupToChapters.has(canonicalGroup)) {
+                                canonicalGroupToChapters.set(canonicalGroup, new Set());
+                            }
+                            const chapters = rawChaptersMap.get(rawGroup) || new Set();
+                            for (const rawChapter of chapters) {
+                                const canonicalChapter = chapterMap[rawGroup][rawChapter];
+                                canonicalGroupToChapters.get(canonicalGroup).add(canonicalChapter);
+                            }
+                        }
+
+                        for (const [canonicalGroup, canonicalChapters] of canonicalGroupToChapters) {
+                            const groupKey = groupKeyMap[canonicalGroup];
+                            for (const canonicalChapter of canonicalChapters) {
+                                const chapKey = canonicalChapter.toLowerCase().replace(/[^a-z0-9\u0980-\u09FF]/g, '_') + '_c';
+                                if (!chapterKeyMap[canonicalChapter]) {
+                                    chapterKeyMap[canonicalChapter] = chapKey;
+                                    newBank.__subjects__.push({ key: chapKey, group: groupKey, name: canonicalChapter, num: chapterNum++ });
+                                    newBank[chapKey] = [];
+                                }
+                            }
+                        }
+
+                        let added = 0;
+                        for (const row of parsedRows) {
+                            const canonicalGroup = groupMap[row.groupNameRaw];
+                            const canonicalChapter = chapterMap[row.groupNameRaw][row.chapterNameRaw];
+                            const chapKey = chapterKeyMap[canonicalChapter];
+                            
+                            const q = normalizeQuestion({ 
+                                q: row.qText, o: row.opts, a: row.correctIdx, note: row.explanation, difficulty: row.difficulty 
+                            });
+                            if (q) {
+                                newBank[chapKey].push(q);
+                                added++;
+                            }
+                        }
+
+                        questionBank = newBank;
                         saveBank();
-                        const msg = `✅ ${added} প্রশ্ন যোগ হয়েছে।${newGroups?` নতুন সাবজেক্ট: ${newGroups},` : ''}${newChapters?` নতুন চ্যাপ্টার: ${newChapters},` : ''}${skipped?` skip: ${skipped}` : ''}`;
-                        if (statusEl) { statusEl.innerHTML = msg; statusEl.style.color = 'var(--green)'; }
+                        safeSet(LAST_SYNC_KEY, Date.now().toString());
+                        
+                        const msg = `✅ সফলভাবে সিঙ্ক হয়েছে! ${added}টি প্রশ্ন লোড হয়েছে। ডুপ্লিকেট অটো-রিমুভ করা হয়েছে।`;
+                        statusEl.innerHTML = msg; statusEl.style.color = 'var(--green)'; 
+                        setTimeout(() => { statusEl.innerHTML = ''; }, 4000);
                         populateSubjectsUI();
                     })
                     .catch(err => {
-                        if (statusEl) { statusEl.innerHTML = `❌ Error: ${err.message}`; statusEl.style.color = 'var(--red)'; }
                         console.error(err);
+                        const el = document.getElementById('sheetLoadStatus');
+                        if (el) { 
+                            el.innerHTML = `❌ সিঙ্ক ব্যর্থ: ${err.message}. পুরনো ডেটা ব্যবহার করা হচ্ছে।`; 
+                            el.style.color = 'var(--red)'; 
+                            setTimeout(() => { el.innerHTML = ''; }, 5000);
+                        }
+                        if (!questionBank || !questionBank.__subjects__?.length) {
+                            questionBank = buildDefaultBank();
+                            saveBank();
+                            populateSubjectsUI();
+                        }
                     });
             }
 
             function autoLoadSheetIfNeeded() {
-                const totalQ = getSubjects().reduce((sum, s) => sum + getCount(s.key), 0);
-                if (totalQ === 0 && SHEET_TSV_URL) {
-                    loadFromSheet(SHEET_TSV_URL);
+                const lastSync = parseInt(safeGet(LAST_SYNC_KEY) || "0");
+                const now = Date.now();
+                if (now - lastSync > 30 * 60 * 1000 || !safeGet(BANK_KEY)) {
+                    syncFromSheet(SHEET_TSV_URL);
+                } else {
+                    populateSubjectsUI();
                 }
             }
             window.autoLoadSheetIfNeeded = autoLoadSheetIfNeeded;
 
-            // ---- WIRE EVENTS ----
             function wireEvents() {
                 $("chapterToggleBtn").onclick = () => $("chapterPanel").classList.toggle("open");
                 $("selectAllBtn").onclick = () => { selectedKeys = new Set(getSubjects().map(s=>s.key)); populateSubjectsUI(); saveSelection(); };
                 $("deselectAllBtn").onclick = () => { selectedKeys.clear(); populateSubjectsUI(); saveSelection(); };
                 $("generateBtn").onclick = () => generateQuiz(getSelectedKeys(), Number($("quizSize").value), false);
                 $("randomBtn").onclick = () => generateQuiz(getSelectedKeys(), Number($("quizSize").value), true);
+                $("syncSheetBtn").onclick = () => syncFromSheet(SHEET_TSV_URL);
                 $("resetHeaderBtn").onclick = resetAnswers;
                 $("showScoreBtn").onclick = () => {
                     const c = answerStatus.filter(Boolean).length;
@@ -1002,11 +1027,9 @@
                 document.addEventListener("keydown", e => { const t = document.activeElement?.tagName?.toLowerCase(); if (["input","textarea","select"].includes(t)) return; if (["1","2","3","4"].includes(e.key) && optionsVisible) { const o = document.querySelector(`.option[data-opt="${Number(e.key)-1}"]`); if (o) o.click(); } if (e.key === "ArrowRight") moveQuestion(1); if (e.key === "ArrowLeft") moveQuestion(-1); });
             }
 
-            // ---- THEME ----
             function applyTheme(theme) { document.documentElement.setAttribute('data-theme', theme); const btn = $('themeToggleBtn'); if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙'; }
             function toggleTheme() { const current = document.documentElement.getAttribute('data-theme') || 'light'; const next = current === 'dark' ? 'light' : 'dark'; applyTheme(next); localStorage.setItem(THEME_KEY, next); }
 
-            // ---- INIT ----
             function initCredits() { const n = [65,114,105,102,32,72,117,115,115,97,105,110].map(c => String.fromCharCode(c)).join(""); $("creditName").textContent = "✨ By " + n; }
             function getSelectedKeys() { const ks = []; document.querySelectorAll(".chapter-cb:checked").forEach(cb => ks.push(cb.value)); return ks; }
 
@@ -1019,15 +1042,12 @@
                 wireEvents();
                 if (!loadQuizState()) { renderQuiz(); renderNav(); updateScore(); }
                 updateTimerDisplay();
-                try {
-                    window.EMBEDDED_BANK = btoa(unescape(encodeURIComponent(JSON.stringify(questionBank))));
-                } catch(e) { console.warn("Initial EMBEDDED_BANK setup failed", e); }
+                try { window.EMBEDDED_BANK = btoa(unescape(encodeURIComponent(JSON.stringify(questionBank)))); } catch(e) {}
             }
 
-            // ---- GLOBALS ----
             let savedBank = loadJson(BANK_KEY, null);
             let embeddedBank = (() => { if (typeof EMBEDDED_BANK === 'string' && EMBEDDED_BANK.length > 0) { try { const binary = atob(EMBEDDED_BANK); const json = decodeURIComponent(escape(binary)); return JSON.parse(json); } catch (e) { return null; } } return null; })();
-            let questionBank = normalizeBank(savedBank || embeddedBank || buildDefaultBank());
+            let questionBank = savedBank || embeddedBank || buildDefaultBank();
             let selectedKeys = new Set(loadJson(SELECTED_KEY, defaultSubjects.map(s => s.key)));
             let currentQuestions = [], userAnswers = [], answerStatus = [], currentIndex = 0, totalQuestions = 0;
             let quizMode = "practice", quizSubmitted = false, optionsVisible = true;
