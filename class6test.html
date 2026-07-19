@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        /* ===== CSS (আগের মতোই, সম্পূর্ণ অপরিবর্তিত) ===== */
         :root {
             --bg: #f0f4fa; --ink: #1a1e2b; --muted: #5f6b7a; --card: #ffffff; --line: #dce3ed;
             --primary: #1a56db; --primary-dark: #1240a0; --accent: #7c3aed; --orange: #ea580c;
@@ -175,6 +174,8 @@
         [data-theme="dark"] .q-num.attempted-mock { background: #2563eb; border-color: #1d4ed8; }
         .note-toggle { display: flex; align-items: center; justify-content: center; background: #f1f5f9; padding: 8px 10px; border-radius: 999px; margin-top: 10px; font-size: 12px; gap: 6px; }
         [data-theme="dark"] .note-toggle { background: #334155; }
+        
+        /* Footer Mobile Optimization: Exactly 2 lines, no horizontal scroll */
         .footer-contact {
             text-align: center; margin-top: 22px; padding: 14px 20px;
             background: rgba(15,23,42,0.92); border-radius: 999px;
@@ -210,52 +211,51 @@
         .results-score-big { font-size: 48px; font-weight: 700; color: var(--primary); margin: 10px 0; line-height: 1.2; }
         .results-banner { font-size: 18px; margin: 8px 0; font-weight: 600; color: var(--ink); }
         .results-chapters { margin-top: 10px; font-size: 9px; color: var(--muted); max-height: 80px; overflow-y: auto; text-align: left; line-height: 1.6; border-top: 1px solid var(--line); padding-top: 8px; }
+        
         @media (max-width:960px) {
             .quiz-panel { grid-template-columns: 1fr; }
             .sidebar { position: static; }
-            .edit-grid { grid-template-columns: 1fr; }
-            .inline-edit-options-grid { grid-template-columns: 1fr; }
-            .subject-editor-row { grid-template-columns: 1fr; border-radius: 16px; }
-            .footer-contact { gap: 5px 8px; padding: 12px 14px; font-size: 11.5px; border-radius: 24px; }
-            .footer-link { padding: 4px 7px; gap: 4px; }
-            .footer-link svg { width: 16px; height: 16px; }
-            .footer-divider { margin: 0 1px; font-size: 13px; }
-            .controls-outer { gap: 8px; }
-            .controls-left { gap: 5px; }
-            .controls-right { gap: 4px; flex-wrap: nowrap; }
-            .controls-right button { font-size: 10px; padding: 5px 9px; }
-            .controls-right input { font-size: 10px; padding: 5px 7px; width: 45px !important; }
-            .controls-right label { font-size: 9px; white-space: nowrap; }
-            .mode-btn { font-size: 10px; padding: 4px 10px; }
-            #chapterToggleBtn { font-size: 10px; padding: 5px 10px; }
         }
         @media (max-width:640px) {
             body { padding: 6px; }
             .container { border-radius: 14px; padding: 10px; }
             .main-header { margin: -10px -10px 14px; border-radius: 14px 14px 0 0; padding: 10px 14px; }
             .options { grid-template-columns: 1fr; }
-            .inline-edit-icon { top: 10px; right: 10px; font-size: 17px; }
-            .footer-contact { border-radius: 20px; gap: 4px 6px; font-size: 11px; padding: 11px 10px; }
-            .footer-link { padding: 4px 6px; }
             .controls { padding: 8px 8px; }
             .controls-outer { flex-direction: column; gap: 8px; }
             .controls-left { width: 100%; justify-content: center; flex-wrap: nowrap; gap: 6px; }
-            .controls-right { width: 100%; justify-content: center; flex-wrap: nowrap; gap: 5px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
-            .controls-right button { font-size: 10px; padding: 5px 9px; flex-shrink: 0; }
-            .controls-right input { font-size: 10px; padding: 5px 6px; width: 42px !important; flex-shrink: 0; }
-            .controls-right label { font-size: 9px; white-space: nowrap; flex-shrink: 0; }
-            .mode-btn { font-size: 10px; padding: 4px 9px; white-space: nowrap; }
-            #chapterToggleBtn { font-size: 10px; padding: 5px 10px; white-space: nowrap; }
-            .mode-selector { gap: 3px; padding: 2px; flex-shrink: 0; }
+            .controls-right { width: 100%; justify-content: center; flex-wrap: wrap; gap: 5px; }
+            .controls-right button { font-size: 11px; padding: 6px 10px; flex-shrink: 0; }
+            .controls-right input { font-size: 11px; padding: 6px 8px; width: 50px !important; flex-shrink: 0; }
+            .controls-right label { font-size: 11px; white-space: nowrap; flex-shrink: 0; }
+            .mode-btn { font-size: 11px; padding: 5px 10px; white-space: nowrap; }
+            #chapterToggleBtn { font-size: 11px; padding: 6px 12px; white-space: nowrap; }
+            .mode-selector { gap: 4px; padding: 3px; flex-shrink: 0; }
+            
+            /* Footer exactly 2 lines on mobile */
+            .footer-contact {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+                padding: 10px;
+                border-radius: 16px;
+                font-size: 11px;
+            }
+            .footer-link {
+                justify-content: center;
+                padding: 6px 4px;
+                font-size: 11px;
+                line-height: 1.2;
+            }
+            .footer-link svg { width: 15px; height: 15px; }
+            .footer-divider { display: none !important; }
         }
         @media (max-width:380px) {
-            .controls-right button { font-size: 9px; padding: 4px 7px; }
-            .controls-right input { font-size: 9px; padding: 4px 5px; width: 36px !important; }
-            .controls-right label { font-size: 8px; }
-            .mode-btn { font-size: 9px; padding: 3px 7px; }
-            #chapterToggleBtn { font-size: 9px; padding: 4px 8px; }
-            .controls-left { gap: 3px; }
-            .controls-right { gap: 3px; }
+            .controls-right button { font-size: 10px; padding: 5px 8px; }
+            .controls-right input { font-size: 10px; padding: 5px 6px; width: 45px !important; }
+            .controls-right label { font-size: 10px; }
+            .mode-btn { font-size: 10px; padding: 4px 8px; }
+            #chapterToggleBtn { font-size: 10px; padding: 5px 10px; }
         }
         .theme-toggle-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; font-size: 16px; cursor: pointer; border-radius: 999px; color: #fff; transition: 0.2s; }
         .theme-toggle-btn:hover { background: rgba(255,255,255,0.15); }
@@ -317,7 +317,6 @@
     </style>
 </head>
 <body>
-    <!-- Warning Overlay -->
     <div class="warning-overlay" id="warningOverlay">
         <div class="siren-icon-wrapper"><span class="siren-emoji">🚨</span></div>
         <div class="warning-card">
@@ -334,7 +333,6 @@
         </div>
     </div>
 
-    <!-- Results Overlay -->
     <div class="results-overlay hidden" id="resultsOverlay">
         <div class="results-card">
             <span class="results-emoji" id="resultsEmoji">🎉</span>
@@ -360,7 +358,8 @@
                 <div class="flex-row" style="gap:8px;">
                     <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle Dark/Light Mode">🌙</button>
                     <div class="credit" id="creditName">✨ By Arif Hussain</div>
-                    <button style="background: var(--slate);" id="resetHeaderBtn" title="Reset Answers">🔄</button>
+                    <button style="background: var(--slate);" id="syncHeaderBtn" title="Silent Sync from Sheet">🔄</button>
+                    <button style="background: var(--red);" id="resetHeaderBtn" title="Reset Answers">🗑️</button>
                 </div>
             </div>
             <section class="controls">
@@ -374,12 +373,12 @@
                     </div>
                     <div class="controls-right">
                         <label style="font-size:12px;">Q :</label>
-                        <input type="number" id="quizSize" value="200" min="1" max="5000" style="width:70px;">
-                        <label style="font-size:12px;">Time(min):</label>
-                        <input type="number" id="timeLimit" value="30" min="1" max="300" style="width:65px;">
-                        <button id="generateBtn">✅Generate(Seq)</button>
-                        <button id="randomBtn" style="background: var(--orange);">🎲Random</button>
-                        <button id="syncSheetBtn" style="background: var(--green);">🔄 Sync Sheet</button>
+                        <input type="number" id="quizSize" value="200" min="1" max="5000" style="width:60px;">
+                        <label style="font-size:12px;">Time:</label>
+                        <input type="number" id="timeLimit" value="30" min="1" max="300" style="width:55px;">
+                        <button id="generateBtn">✅ Seq</button>
+                        <button id="randomBtn" style="background: var(--orange);">🎲 Rnd</button>
+                        <button id="aiGenerateBtn" style="background: var(--accent);">🤖 AI Quiz</button>
                     </div>
                 </div>
                 <div class="chapter-panel" id="chapterPanel">
@@ -405,37 +404,25 @@
             </section>
         </div>
 
-        <!-- Footer -->
         <div class="footer-contact">
             <a href="mailto:arifbeldanga@gmail.com" class="footer-link email-link" title="ইমেইল করুন">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="4" width="20" height="16" rx="2" ry="2"/>
-                    <polyline points="22,4 12,13.5 2,4"/>
-                </svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><polyline points="22,4 12,13.5 2,4"/></svg>
                 arifbeldanga@gmail.com
             </a>
             <span class="footer-divider">|</span>
             <a href="https://t.me/beldanga1" target="_blank" class="footer-link tg-link" title="টেলিগ্রামে যুক্ত হন" rel="noopener noreferrer">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.87 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.938z"/>
-                </svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.87 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.938z"/></svg>
                 @beldanga1
             </a>
             <span class="footer-divider">|</span>
             <a href="https://instagram.com/arifhussain.x" target="_blank" class="footer-link ig-link" title="ইনস্টাগ্রামে ফলো করুন" rel="noopener noreferrer">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                    <circle cx="12" cy="12" r="5"/>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="3" stroke-linecap="round"/>
-                </svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="3" stroke-linecap="round"/></svg>
                 arifhussain.x
             </a>
             <span class="footer-divider">|</span>
             <a href="upi://pay?pa=arho065-1@okicici&amp;pn=ArifHussain&amp;cu=INR" class="footer-link upi-link" title="সাপোর্ট করতে UPI পেমেন্ট করুন" rel="noopener">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                </svg>
-                <span>Support &amp; Motivate : UPI arho065-1@okicici / 9564385573</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span>Support UPI</span>
             </a>
         </div>
     </main>
@@ -443,8 +430,8 @@
     <script>
         const SHEET_TSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTx7-n5ATXwTftgyzPgql2F5E5nPVh8Mrzp2HZQKJ75lPTv8sk4cQb31F8WYkJOlv90I1zKokM42F1Y/pub?output=tsv";
         const EMBEDDED_BANK = "";
+        const API_KEY = "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";
 
-        // 1. WARNING OVERLAY
         (function() {
             const CORRECT_PASSWORD = "1122";
             const overlay = document.getElementById('warningOverlay');
@@ -478,10 +465,8 @@
             pwdInput.focus();
         })();
 
-        // 2. MAIN APPLICATION
         (function() {
-            // VERSION UPDATED TO FORCE FRESH SYNC AND CLEAR OLD CACHED DUPLICATES
-            const APP_VERSION = "class_vi_exam_quiz_v14_ai_sync";
+            const APP_VERSION = "class_vi_exam_quiz_v15_silent_ai";
             const BANK_KEY = "CLASS_VI_QUIZ_BANK_" + APP_VERSION;
             const SESSION_KEY = "CLASS_VI_QUIZ_SESSION_" + APP_VERSION;
             const SELECTED_KEY = "CLASS_VI_QUIZ_SELECTED_" + APP_VERSION;
@@ -509,7 +494,6 @@
             ];
 
             const seedQuestions = {};
-
             const $ = id => document.getElementById(id);
             function safeGet(k) { try { return localStorage.getItem(k); } catch { return null; } }
             function safeSet(k, v) { try { localStorage.setItem(k, v); } catch {} }
@@ -553,10 +537,7 @@
 
             const SUBJECT_COLORS = ['#f59e0b','#8b5cf6','#ec4899','#3b82f6','#22c55e','#f97316'];
             const SUBJECT_COLORS_DARK = ['#fbbf24','#a78bfa','#f472b6','#60a5fa','#4ade80','#fb923c'];
-            function getSubjectColor(index, isDark) {
-                const colors = isDark ? SUBJECT_COLORS_DARK : SUBJECT_COLORS;
-                return colors[index % colors.length];
-            }
+            function getSubjectColor(index, isDark) { return (isDark ? SUBJECT_COLORS_DARK : SUBJECT_COLORS)[index % 6]; }
 
             function populateSubjectsUI() {
                 const groups = getSubjectGroups();
@@ -567,8 +548,7 @@
                     const textColor = isDark ? '#e2e8f0' : '#1a1e2b';
                     return `<div class="subject-accordion ${gi===0?"open":""}">
                         <div class="subject-header" style="background:${color}; color:${textColor};" data-group="${g.key}">
-                            <span>${g.name}</span>
-                            <span class="subject-arrow" style="color:${textColor};">▼</span>
+                            <span>${g.name}</span><span class="subject-arrow" style="color:${textColor};">▼</span>
                         </div>
                         <div class="subject-chapters ${gi===0?"open":""}">
                             <div class="subject-chapters-inner">
@@ -588,7 +568,7 @@
             function generateQuiz(ks, sz, rnd=false) {
                 if(!ks.length) ks = getSubjects().map(s=>s.key);
                 let sel = collectQuestions(ks);
-                if(!sel.length) { alert("No questions! প্রথমে গুগল শিট থেকে প্রশ্ন লোড করুন।"); return; }
+                if(!sel.length) { alert("No questions! Please sync sheet first."); return; }
                 if(rnd) sel = shuffle(sel);
                 currentQuestions = sel.slice(0, Math.max(1, sz || 25)).map(shuffleOptions);
                 totalQuestions = currentQuestions.length;
@@ -598,7 +578,7 @@
                 quizGeneratedBy = rnd ? 'random' : 'seq';
                 quizTimeLimit = parseInt($("timeLimit").value) || 30;
                 stopTimer(); timeRemaining = null; timerActive = false;
-                if(quizMode === "mock") { const tl = parseInt($("timeLimit").value) || 30; timeRemaining = tl*60; startTimer(timeRemaining); }
+                if(quizMode === "mock") { timeRemaining = quizTimeLimit * 60; startTimer(timeRemaining); }
                 renderQuiz(); renderNav(); updateScore(); updateTimerDisplay(); saveQuizState();
             }
 
@@ -628,7 +608,7 @@
                 if($("submitMockBtn")) $("submitMockBtn").style.display = (quizMode==="mock"&&timerActive)?'block':'none';
             }
             function updateModeButtons() { document.querySelectorAll('.mode-btn').forEach(b=>{ b.classList.toggle('active', b.dataset.mode===quizMode); }); }
-            function setQuizMode(mode) { quizMode=mode; updateModeButtons(); stopTimer(); timeRemaining=null; timerActive=false; quizSubmitted = false; optionsVisible = true; updateTimerDisplay(); if(currentQuestions.length>0 && mode==="mock"){ const tl=parseInt($("timeLimit").value)||30; timeRemaining=tl*60; startTimer(timeRemaining); } saveQuizState(); }
+            function setQuizMode(mode) { quizMode=mode; updateModeButtons(); stopTimer(); timeRemaining=null; timerActive=false; quizSubmitted = false; optionsVisible = true; updateTimerDisplay(); if(currentQuestions.length>0 && mode==="mock"){ timeRemaining=(parseInt($("timeLimit").value)||30)*60; startTimer(timeRemaining); } saveQuizState(); }
 
             function fireConfetti() { const count=500; const defaults={spread:360,ticks:80,gravity:0.6,decay:0.9,startVelocity:30}; for(let i=0;i<5;i++) confetti({...defaults,particleCount:count/5,origin:{x:Math.random(),y:Math.random()*0.5}}); }
             function showResultsOverlay() {
@@ -637,24 +617,13 @@
                 const s = totalQuestions - userAnswers.filter(a => a !== null).length;
                 const score = Math.max(0, c - w * 0.5);
                 const pct = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
-                let emoji, message;
-                if (pct === 100) { emoji = '🫡'; message = 'তুমি তো মাস্টার! একেবারে আগুন! চলতে থাকুক!'; }
-                else if (pct >= 90) { emoji = '😱'; message = 'জস! একদম নিখুঁতের ধারেকাছে!'; }
-                else if (pct >= 80) { emoji = '🎉'; message = 'বাহ্‌, দারুণ! আসাধারন!'; }
-                else if (pct >= 60) { emoji = '👏'; message = 'সাবাশ, ভালোই এগোচ্ছো।'; }
-                else if (pct >= 45) { emoji = '😒'; message = 'শুরুটা ঠিক আছে, আরেকটু প্র্যাকটিস চাই।'; }
-                else if (pct >= 35) { emoji = '😐'; message = 'লেগে থাকো, পরের বার এর থেকে ভালো রেজাল্ট চাই!'; }
-                else { emoji = '😢'; message = 'লেগে থাকো, ঠিকই পারবে!'; }
+                let emoji = pct >= 80 ? '🎉' : (pct >= 60 ? '👏' : '😢');
+                let message = pct >= 80 ? 'দারুণ! আসাধারন!' : (pct >= 60 ? 'ভালোই এগোচ্ছো।' : 'লেগে থাকো, ঠিকই পারবে!');
                 document.getElementById('resultsEmoji').textContent = emoji;
                 document.getElementById('resultsMessage').textContent = message;
                 document.getElementById('resultsScore').textContent = score + '/' + totalQuestions;
                 const banner = document.getElementById('resultsBanner');
-                if (banner) {
-                    const timeInfo = quizTimeLimit ? ' • ' + quizTimeLimit + ' min' : '';
-                    if (quizGeneratedBy === 'random') banner.textContent = '🎲 Random Test' + timeInfo;
-                    else if (quizGeneratedBy === 'seq') banner.textContent = '✅ Sequential Test' + timeInfo;
-                    else banner.textContent = '';
-                }
+                if (banner) banner.textContent = (quizGeneratedBy === 'ai' ? '🤖 AI Generated Quiz' : (quizGeneratedBy === 'random' ? '🎲 Random Test' : '✅ Sequential Test')) + (quizTimeLimit ? ' • ' + quizTimeLimit + ' min' : '');
                 document.getElementById('resCorrect').textContent = c;
                 document.getElementById('resWrong').textContent = w;
                 document.getElementById('resSkipped').textContent = s;
@@ -667,14 +636,11 @@
                         const groupName = q._groupName || 'Unknown';
                         const chapterName = q._chapterName || 'Unknown';
                         if (!chapterMap.has(groupName)) chapterMap.set(groupName, new Map());
-                        const chapterCounts = chapterMap.get(groupName);
-                        chapterCounts.set(chapterName, (chapterCounts.get(chapterName) || 0) + 1);
+                        chapterMap.get(groupName).set(chapterName, (chapterMap.get(groupName).get(chapterName) || 0) + 1);
                     }
                     let html = '<strong>📚 Subjects & Chapters:</strong><br>';
                     for (const [group, chapters] of chapterMap) {
-                        html += '• <strong>' + escapeHtml(group) + ':</strong> ';
-                        html += [...chapters].map(([ch, count]) => escapeHtml(ch) + ' (' + count + ' Qs)').join(', ');
-                        html += '<br>';
+                        html += '• <strong>' + escapeHtml(group) + ':</strong> ' + [...chapters].map(([ch, count]) => escapeHtml(ch) + ' (' + count + ' Qs)').join(', ') + '<br>';
                     }
                     chaptersDiv.innerHTML = html;
                 } else if (chaptersDiv) { chaptersDiv.innerHTML = ''; }
@@ -772,85 +738,40 @@
                 if (quizMode === "mock" && !quizSubmitted) { if(noteRow) noteRow.style.display = 'none'; if(showScoreBtn) showScoreBtn.style.display = 'none'; }
                 else { if(noteRow) noteRow.style.display = ''; if(showScoreBtn) showScoreBtn.style.display = ''; }
             }
-            function resetAnswers() { quizSubmitted = false; optionsVisible = true; userAnswers.fill(null); answerStatus.fill(false); currentIndex=0; stopTimer(); timeRemaining=null; timerActive=false; quizGeneratedBy = null; quizTimeLimit = null; if(quizMode==="mock"){ const tl=parseInt($("timeLimit").value)||30; timeRemaining=tl*60; startTimer(timeRemaining); } renderQuiz(); renderNav(); updateScore(); updateTimerDisplay(); saveQuizState(); }
+            function resetAnswers() { quizSubmitted = false; optionsVisible = true; userAnswers.fill(null); answerStatus.fill(false); currentIndex=0; stopTimer(); timeRemaining=null; timerActive=false; quizGeneratedBy = null; quizTimeLimit = null; if(quizMode==="mock"){ timeRemaining=(parseInt($("timeLimit").value)||30)*60; startTimer(timeRemaining); } renderQuiz(); renderNav(); updateScore(); updateTimerDisplay(); saveQuizState(); }
             function submitMockTest() { if(!confirm("Mock test submit করবেন? এরপর আর উত্তর পরিবর্তন করতে পারবেন না।")) return; stopTimer(); quizSubmitted = true; renderQuiz(); renderNav(); updateScore(); saveQuizState(); fireConfetti(); showResultsOverlay(); }
 
-            // ==========================================
-            // AI & SMART DEDUPLICATION LOGIC
-            // ==========================================
             function strictLocalNormalize(name) {
                 if (!name) return "";
-                return name
-                    .replace(/[\u{1F000}-\u{1FFFF}]/gu, '') // remove emojis
-                    .replace(/[^\w\u0980-\u09FF]/g, '') // remove ALL spaces, punctuation, keep only alphanumeric and Bengali
-                    .toLowerCase()
-                    .trim();
+                return name.replace(/[\u{1F000}-\u{1FFFF}]/gu, '').replace(/[^\w\u0980-\u09FF]/g, '').toLowerCase().trim();
             }
 
             async function getCanonicalMappings(rawGroups, rawChaptersMap) {
-                const payload = {
-                    groups: Array.from(rawGroups),
-                    chapters: {}
-                };
-                for (const [gk, chapters] of rawChaptersMap) {
-                    payload.chapters[gk] = Array.from(chapters);
-                }
-                
-                const apiKey = "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";
+                const payload = { groups: Array.from(rawGroups), chapters: {} };
+                for (const [gk, chapters] of rawChaptersMap) payload.chapters[gk] = Array.from(chapters);
                 try {
                     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                         method: "POST",
-                        headers: {
-                            "Authorization": `Bearer ${apiKey}`,
-                            "Content-Type": "application/json",
-                            "HTTP-Referer": window.location.href,
-                            "X-Title": "Quiz App Deduplication"
-                        },
-                        body: JSON.stringify({
-                            model: "mistralai/mistral-7b-instruct:free",
-                            messages: [
-                                { 
-                                    role: "system", 
-                                    content: "You are a data cleaning assistant. You will receive a JSON object with 'groups' (subject names) and 'chapters' (mapped to group keys). Some names have duplicates due to extra spaces, punctuation, or slight spelling variations (especially in Bengali). Return a JSON object with the EXACT SAME STRUCTURE, but replace every name with its standardized, canonical version (trim spaces, remove extra punctuation, standardize spelling). Return ONLY valid JSON, no markdown, no explanations." 
-                                },
-                                { role: "user", content: JSON.stringify(payload) }
-                            ],
-                            temperature: 0.1
-                        })
+                        headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "Quiz Dedup" },
+                        body: JSON.stringify({ model: "mistralai/mistral-7b-instruct:free", messages: [{ role: "system", content: "Return ONLY valid JSON. Standardize these group and chapter names by removing extra spaces/punctuation and fixing slight spelling variations. Return exact same structure." }, { role: "user", content: JSON.stringify(payload) }], temperature: 0.1 })
                     });
                     const data = await response.json();
                     if (data.error) throw new Error(data.error.message);
-                    const content = data.choices[0].message.content;
-                    const jsonStr = content.replace(/```json\n?|\n?```/g, '').trim();
-                    return JSON.parse(jsonStr);
+                    return JSON.parse(data.choices[0].message.content.replace(/```json\n?|\n?```/g, '').trim());
                 } catch (e) {
-                    console.warn("AI normalization failed, falling back to strict local normalization", e);
+                    console.warn("AI normalization failed, using local fallback", e);
                     return null;
                 }
             }
 
+            // SILENT SYNC: No messages shown to user
             function syncFromSheet(url) {
                 if (!url) return;
-                let statusEl = document.getElementById('sheetLoadStatus');
-                if (!statusEl) {
-                    const div = document.createElement('div');
-                    div.id = 'sheetLoadStatus';
-                    div.style.cssText = 'text-align:center; padding:10px; font-weight:600;';
-                    document.querySelector('.controls').prepend(div);
-                    statusEl = document.getElementById('sheetLoadStatus');
-                }
-                statusEl.innerHTML = '⏳ AI দিয়ে ডুপ্লিকেট চেক করে শিট সিঙ্ক হচ্ছে...';
-                statusEl.style.color = 'var(--orange)';
-                
                 fetch(url, { mode: 'cors' })
-                    .then(res => {
-                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                        return res.text();
-                    })
+                    .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.text(); })
                     .then(async tsv => {
                         const rows = tsv.split(/\r?\n/).filter(line => line.trim() !== '');
                         if (rows.length < 2) throw new Error('Sheet empty');
-                        
                         const dataRows = rows.slice(1);
                         const rawGroups = new Set();
                         const rawChaptersMap = new Map();
@@ -867,13 +788,11 @@
                             if (isNaN(correctIdx)) {
                                 const map = { 'A':0, 'B':1, 'C':2, 'D':3, 'a':0, 'b':1, 'c':2, 'd':3 };
                                 const letter = cols[7].trim().toUpperCase();
-                                if (letter in map) correctIdx = map[letter];
-                                else continue;
+                                if (letter in map) correctIdx = map[letter]; else continue;
                             }
                             if (correctIdx < 0 || correctIdx > 3) continue;
                             const explanation = cols.length > 8 ? cols[8] : '';
                             const difficulty = cols.length > 9 ? cols[9].toLowerCase() : 'medium';
-                            
                             parsedRows.push({ groupNameRaw, chapterNameRaw, qText, opts, correctIdx, explanation, difficulty });
                             rawGroups.add(groupNameRaw);
                             if (!rawChaptersMap.has(groupNameRaw)) rawChaptersMap.set(groupNameRaw, new Set());
@@ -881,20 +800,14 @@
                         }
 
                         let canonicalMap = await getCanonicalMappings(rawGroups, rawChaptersMap);
-                        
-                        const groupMap = {};
-                        const chapterMap = {};
+                        const groupMap = {}, chapterMap = {};
                         
                         if (canonicalMap) {
-                            canonicalMap.groups.forEach((canonical, i) => {
-                                groupMap[Array.from(rawGroups)[i]] = canonical;
-                            });
+                            canonicalMap.groups.forEach((canonical, i) => { groupMap[Array.from(rawGroups)[i]] = canonical; });
                             for (const [rawGroup, chapters] of Object.entries(canonicalMap.chapters)) {
                                 chapterMap[rawGroup] = {};
                                 const rawChapterList = Array.from(rawChaptersMap.get(rawGroup) || []);
-                                chapters.forEach((canonical, i) => {
-                                    chapterMap[rawGroup][rawChapterList[i]] = canonical;
-                                });
+                                chapters.forEach((canonical, i) => { chapterMap[rawGroup][rawChapterList[i]] = canonical; });
                             }
                         } else {
                             const localGroupMap = {};
@@ -915,9 +828,7 @@
                         }
 
                         const newBank = { __subjectGroups__: [], __subjects__: [] };
-                        const groupKeyMap = {};
-                        const chapterKeyMap = {};
-
+                        const groupKeyMap = {}, chapterKeyMap = {};
                         let groupNum = 1;
                         const uniqueCanonicalGroups = [...new Set(Object.values(groupMap))];
                         for (const canonicalGroup of uniqueCanonicalGroups) {
@@ -930,9 +841,7 @@
                         const canonicalGroupToChapters = new Map();
                         for (const rawGroup of rawGroups) {
                             const canonicalGroup = groupMap[rawGroup];
-                            if (!canonicalGroupToChapters.has(canonicalGroup)) {
-                                canonicalGroupToChapters.set(canonicalGroup, new Set());
-                            }
+                            if (!canonicalGroupToChapters.has(canonicalGroup)) canonicalGroupToChapters.set(canonicalGroup, new Set());
                             const chapters = rawChaptersMap.get(rawGroup) || new Set();
                             for (const rawChapter of chapters) {
                                 const canonicalChapter = chapterMap[rawGroup][rawChapter];
@@ -952,50 +861,31 @@
                             }
                         }
 
-                        let added = 0;
                         for (const row of parsedRows) {
                             const canonicalGroup = groupMap[row.groupNameRaw];
                             const canonicalChapter = chapterMap[row.groupNameRaw][row.chapterNameRaw];
                             const chapKey = chapterKeyMap[canonicalChapter];
-                            
-                            const q = normalizeQuestion({ 
-                                q: row.qText, o: row.opts, a: row.correctIdx, note: row.explanation, difficulty: row.difficulty 
-                            });
-                            if (q) {
-                                newBank[chapKey].push(q);
-                                added++;
-                            }
+                            const q = normalizeQuestion({ q: row.qText, o: row.opts, a: row.correctIdx, note: row.explanation, difficulty: row.difficulty });
+                            if (q) newBank[chapKey].push(q);
                         }
 
                         questionBank = newBank;
                         saveBank();
                         safeSet(LAST_SYNC_KEY, Date.now().toString());
-                        
-                        const msg = `✅ সফলভাবে সিঙ্ক হয়েছে! ${added}টি প্রশ্ন লোড হয়েছে। ডুপ্লিকেট অটো-রিমুভ করা হয়েছে।`;
-                        statusEl.innerHTML = msg; statusEl.style.color = 'var(--green)'; 
-                        setTimeout(() => { statusEl.innerHTML = ''; }, 4000);
-                        populateSubjectsUI();
+                        // SILENT: No status message shown
                     })
                     .catch(err => {
-                        console.error(err);
-                        const el = document.getElementById('sheetLoadStatus');
-                        if (el) { 
-                            el.innerHTML = `❌ সিঙ্ক ব্যর্থ: ${err.message}. পুরনো ডেটা ব্যবহার করা হচ্ছে।`; 
-                            el.style.color = 'var(--red)'; 
-                            setTimeout(() => { el.innerHTML = ''; }, 5000);
-                        }
+                        console.warn("Silent sync failed:", err);
                         if (!questionBank || !questionBank.__subjects__?.length) {
                             questionBank = buildDefaultBank();
                             saveBank();
-                            populateSubjectsUI();
                         }
                     });
             }
 
             function autoLoadSheetIfNeeded() {
                 const lastSync = parseInt(safeGet(LAST_SYNC_KEY) || "0");
-                const now = Date.now();
-                if (now - lastSync > 30 * 60 * 1000 || !safeGet(BANK_KEY)) {
+                if (Date.now() - lastSync > 30 * 60 * 1000 || !safeGet(BANK_KEY)) {
                     syncFromSheet(SHEET_TSV_URL);
                 } else {
                     populateSubjectsUI();
@@ -1003,13 +893,84 @@
             }
             window.autoLoadSheetIfNeeded = autoLoadSheetIfNeeded;
 
+            // AI GENERATE BUTTON LOGIC
+            async function generateAIQuiz() {
+                const selected = getSelectedKeys();
+                if (!selected.length) { alert("Please select at least one chapter first."); return; }
+                const btn = $("aiGenerateBtn");
+                const originalText = btn.innerHTML;
+                btn.innerHTML = "⏳ AI Thinking...";
+                btn.disabled = true;
+
+                const subjects = getSubjects().filter(s => selected.includes(s.key));
+                const chapterNames = subjects.map(s => s.name).join(", ");
+
+                try {
+                    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${API_KEY}`,
+                            "Content-Type": "application/json",
+                            "HTTP-Referer": window.location.href,
+                            "X-Title": "WBBSE Quiz Generator"
+                        },
+                        body: JSON.stringify({
+                            model: "google/gemma-2-9b-it:free",
+                            messages: [
+                                {
+                                    role: "system",
+                                    content: "You are an expert teacher for Class 6 WBBSE (West Bengal Board). Generate exactly 5 high-quality multiple-choice questions based on the provided chapters. Return ONLY a valid JSON array. Each object must have: 'q' (string), 'o' (array of 4 strings), 'a' (integer 0-3), 'note' (explanation with a source like 'WBBSE Book' or 'YouTube'), 'difficulty' ('easy'|'medium'|'hard')."
+                                },
+                                {
+                                    role: "user",
+                                    content: `Chapters: ${chapterNames}`
+                                }
+                            ],
+                            temperature: 0.7
+                        })
+                    });
+                    const data = await response.json();
+                    if (data.error) throw new Error(data.error.message);
+                    
+                    let content = data.choices[0].message.content;
+                    const jsonMatch = content.match(/\[[\s\S]*\]/);
+                    if (!jsonMatch) throw new Error("Invalid JSON response from AI");
+                    
+                    const aiQuestions = JSON.parse(jsonMatch[0]);
+                    const formattedQuestions = aiQuestions.map((q, i) => ({
+                        q: q.q, o: q.o, a: q.a, note: q.note, difficulty: q.difficulty || "medium",
+                        _subject: "ai_generated", _chapterName: "AI: " + chapterNames, _groupName: "🤖 AI Quiz"
+                    }));
+
+                    currentQuestions = formattedQuestions;
+                    totalQuestions = currentQuestions.length;
+                    userAnswers = new Array(totalQuestions).fill(null);
+                    answerStatus = new Array(totalQuestions).fill(false);
+                    currentIndex = 0; quizSubmitted = false; optionsVisible = true;
+                    quizGeneratedBy = 'ai';
+                    quizTimeLimit = parseInt($("timeLimit").value) || 10;
+                    
+                    stopTimer(); timeRemaining = null; timerActive = false;
+                    if(quizMode === "mock") { timeRemaining = quizTimeLimit * 60; startTimer(timeRemaining); }
+                    
+                    renderQuiz(); renderNav(); updateScore(); updateTimerDisplay(); saveQuizState();
+                } catch (e) {
+                    console.error(e);
+                    alert("AI Generation failed. Please check internet and try again.");
+                } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            }
+
             function wireEvents() {
                 $("chapterToggleBtn").onclick = () => $("chapterPanel").classList.toggle("open");
                 $("selectAllBtn").onclick = () => { selectedKeys = new Set(getSubjects().map(s=>s.key)); populateSubjectsUI(); saveSelection(); };
                 $("deselectAllBtn").onclick = () => { selectedKeys.clear(); populateSubjectsUI(); saveSelection(); };
                 $("generateBtn").onclick = () => generateQuiz(getSelectedKeys(), Number($("quizSize").value), false);
                 $("randomBtn").onclick = () => generateQuiz(getSelectedKeys(), Number($("quizSize").value), true);
-                $("syncSheetBtn").onclick = () => syncFromSheet(SHEET_TSV_URL);
+                $("aiGenerateBtn").onclick = generateAIQuiz;
+                $("syncHeaderBtn").onclick = () => syncFromSheet(SHEET_TSV_URL); // Single silent sync button
                 $("resetHeaderBtn").onclick = resetAnswers;
                 $("showScoreBtn").onclick = () => {
                     const c = answerStatus.filter(Boolean).length;
@@ -1017,7 +978,7 @@
                     const s = totalQuestions - userAnswers.filter(a=>a!==null&&a!== -1).length;
                     const score = Math.max(0, c - w * 0.5);
                     const pct = totalQuestions>0?Math.round((score/totalQuestions)*100):0;
-                    alert(`📊 Results Summary\n\n✅ Correct: ${c}\n❌ Wrong: ${w}\n⏭️ Skipped: ${s}\n📈 Score (with -0.5 negative marking): ${score}/${totalQuestions}\n📈 Accuracy: ${pct}%`);
+                    alert(`📊 Results Summary\n\n✅ Correct: ${c}\n❌ Wrong: ${w}\n⏭️ Skipped: ${s}\n📈 Score: ${score}/${totalQuestions}\n📈 Accuracy: ${pct}%`);
                 };
                 $("showNoteBeforeAnswer").onchange = renderQuiz;
                 $("submitMockBtn").onclick = submitMockTest;
@@ -1029,13 +990,11 @@
 
             function applyTheme(theme) { document.documentElement.setAttribute('data-theme', theme); const btn = $('themeToggleBtn'); if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙'; }
             function toggleTheme() { const current = document.documentElement.getAttribute('data-theme') || 'light'; const next = current === 'dark' ? 'light' : 'dark'; applyTheme(next); localStorage.setItem(THEME_KEY, next); }
-
             function initCredits() { const n = [65,114,105,102,32,72,117,115,115,97,105,110].map(c => String.fromCharCode(c)).join(""); $("creditName").textContent = "✨ By " + n; }
             function getSelectedKeys() { const ks = []; document.querySelectorAll(".chapter-cb:checked").forEach(cb => ks.push(cb.value)); return ks; }
 
             function init() {
-                const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
-                applyTheme(savedTheme);
+                applyTheme(localStorage.getItem(THEME_KEY) || 'light');
                 initCredits();
                 populateSubjectsUI();
                 updateModeButtons();
@@ -1046,7 +1005,7 @@
             }
 
             let savedBank = loadJson(BANK_KEY, null);
-            let embeddedBank = (() => { if (typeof EMBEDDED_BANK === 'string' && EMBEDDED_BANK.length > 0) { try { const binary = atob(EMBEDDED_BANK); const json = decodeURIComponent(escape(binary)); return JSON.parse(json); } catch (e) { return null; } } return null; })();
+            let embeddedBank = (() => { if (typeof EMBEDDED_BANK === 'string' && EMBEDDED_BANK.length > 0) { try { return JSON.parse(decodeURIComponent(escape(atob(EMBEDDED_BANK)))); } catch (e) { return null; } } return null; })();
             let questionBank = savedBank || embeddedBank || buildDefaultBank();
             let selectedKeys = new Set(loadJson(SELECTED_KEY, defaultSubjects.map(s => s.key)));
             let currentQuestions = [], userAnswers = [], answerStatus = [], currentIndex = 0, totalQuestions = 0;
