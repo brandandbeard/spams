@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -12,7 +11,7 @@ body{font-family:'Noto Serif Bengali','Inter',sans-serif;background:#06060f;colo
 .container{max-width:820px;margin:0 auto}
 header{text-align:center;margin-bottom:28px}
 header h1{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:800;background:linear-gradient(135deg,#f0c040,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
-header p{color:rgba(255,255,255,0.5);font-size:0.95rem;max-width:600px;margin:0 auto}
+header p{color:rgba(255,255,255,0.5);font-size:0.95rem;max-width:620px;margin:0 auto}
 .card{background:rgba(20,20,46,0.5);border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:24px;margin-bottom:20px;backdrop-filter:blur(12px)}
 .card h2{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:#f0c040;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 label{display:block;font-family:'Space Grotesk',sans-serif;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;color:rgba(255,255,255,0.4);margin:14px 0 6px}
@@ -44,7 +43,7 @@ button{font-family:'Space Grotesk',sans-serif;font-weight:700;border:none;border
 <div class="container">
     <header>
         <h1>🤖 Explanation Generator</h1>
-        <p>সব প্রশ্নের AI explanation <b style="color:#f0c040">একবারে</b> বানিয়ে Sheet এ সেভ করো। তারপর students রা <b style="color:#34A853">limit ছাড়াই instant</b> পাবে!</p>
+        <p>সব প্রশ্নের <b style="color:#f0c040">শিক্ষক-স্টাইল + ছবিসহ</b> explanation একবারে বানিয়ে Sheet এ সেভ করো। তারপর students রা <b style="color:#34A853">limit ছাড়াই instant</b> পাবে!</p>
     </header>
 
     <div class="card">
@@ -55,7 +54,7 @@ button{font-family:'Space Grotesk',sans-serif;font-weight:700;border:none;border
         <input type="text" id="aiKey" value="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">
         <label>Model</label>
         <input type="text" id="aiModel" value="openrouter/free">
-        <label>প্রতিটি call এর মাঝে delay (milliseconds) — limit এড়াতে ২০০০ রাখো</label>
+        <label>প্রতিটি call এর মাঝে delay (ms) — limit এড়াতে ২০০০ রাখো</label>
         <input type="number" id="delay" value="2000">
         <button class="btn-primary" onclick="loadSheet()">📥 Sheet Load করো</button>
     </div>
@@ -81,7 +80,7 @@ button{font-family:'Space Grotesk',sans-serif;font-weight:700;border:none;border
                 <li><b>Paste (Ctrl+V)</b> করো</li>
                 <li>ব্যস! <b>"Explanation"</b> header আর সব explanation নিচে নিচে বসে যাবে ✅</li>
             </ol>
-            ⚠️ খেয়াল রাখো: Sheet এ যেন <b>Subject, Chapter, Topic, Topicimage, Question, Answer, Type, Image, Explanation</b> এই order এ column থাকে।
+            ⚠️ Sheet এ column order: <b>Subject, Chapter, Topic, Topicimage, Question, Answer, Type, Image, Explanation</b>
         </div>
         <textarea id="outputArea" rows="10"></textarea>
         <div>
@@ -94,6 +93,37 @@ button{font-family:'Space Grotesk',sans-serif;font-weight:700;border:none;border
 <script>
 const AI_URL="https://openrouter.ai/api/v1/chat/completions";
 let headers=[],sheetRows=[],colIdx={},generated=[];
+
+// ═══════════════════════════════════════════════════════════
+//  🎓 শিক্ষক-স্টাইল Prompt + 🖼️ [IMG:keyword] (ছবির জন্য)
+// ═══════════════════════════════════════════════════════════
+const TEACHER_PROMPT=`তুমি একজন অভিজ্ঞ ও বন্ধুত্বপূর্ণ Class 10 শিক্ষক। তোমার লক্ষ্য — দুর্বল ছাত্রছাত্রীরাও (যারা ৩০% নম্বর পায়) যেন সহজে বুঝতে পারে এবং পরীক্ষায় ভালো নম্বর পায়।
+
+ভাষার নিয়ম (খুব গুরুত্বপূর্ণ):
+- সহজ ও সাবলীল বাংলা, কিন্তু অবশ্যই মার্জিত ও শিক্ষাসম্মত
+- শিশুসুলভ, অশালীন বা দ্ব্যর্থক শব্দ ব্যবহার করবে না
+- ছোট ছোট বাক্য; কঠিন পরিভাষা এড়াও (জরুরি হলে সহজ অর্থ দাও)
+
+নিচের format-এ explain করো (প্রতিটি অংশ অবশ্যই দিতে হবে):
+
+🎯 **সহজ কথায়:** এক-দুই লাইনে মূল ধারণা।
+
+🌍 **বাস্তব উদাহরণ:** দৈনন্দিন জীবনের ভদ্র ও প্রাসঙ্গিক উপমা।
+
+📝 **ধাপে ধাপে:** numbered ছোট ছোট ধাপ।
+
+💡 **মনে রাখার কৌশল:** সহজ ছড়া বা কৌশল।
+
+✍️ **পরীক্ষায় লেখো:** পূর্ণ নম্বর পাওয়ার মতো সঠিক উত্তর।
+
+⚠️ **সাধারণ ভুল:** ছাত্রছাত্রীরা যে ১-২টি ভুল করে।
+
+🖼️ সবার শেষে ছবির জন্য একটা লাইন দাও (ছাত্ররা এটা দেখবে না, শুধু ছবি খোঁজার জন্য):
+[IMG:প্রয়োজনীয় ছবি/diagram এর ৪-৬টি English keyword]
+উদাহরণ: [IMG:binary fission amoeba cell division diagram]
+
+- গুরুত্বপূর্ণ শব্দ **bold** করো
+- সর্বোচ্চ ২৮০ শব্দ`;
 
 function log(msg,cls){
     const l=document.getElementById('log');
@@ -138,8 +168,8 @@ async function callAI(q,a){
         method:'POST',
         headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json','HTTP-Referer':location.href,'X-Title':'Mega Quiz Generator'},
         body:JSON.stringify({model:model,messages:[
-            {role:'system',content:'তুমি expert Class 10 teacher। বাংলায় সহজে explain করো। Key points **bold** করো। Max 120 words। শুধু explanation দাও, অন্য কিছু না।'},
-            {role:'user',content:`প্রশ্ন: ${q}\nউত্তর: ${a}\n\nসহজে explain করো:`}
+            {role:'system',content:TEACHER_PROMPT},
+            {role:'user',content:`প্রশ্ন: ${q}\nমূল উত্তর: ${a}\n\nউপরের format-এ সহজ ও মার্জিত ভাষায় বুঝিয়ে দাও:`}
         ],max_tokens:1024,temperature:0.7})
     });
     if(!r.ok){
