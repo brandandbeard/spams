@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সূচিছিদ্র ক্যামেরা - হাতে কলমে পরীক্ষা</title>
+    <style>
+        body {
+            font-family: 'Noto Sans Bengali', Arial, sans-serif;
+            background: #fff9e6;
+            text-align: center;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #d84315;
+        }
+        .box {
+            background: #ffffff;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            padding: 20px;
+            display: inline-block;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+        canvas {
+            cursor: grab;
+            display: block;
+            margin: 20px auto;
+            border: 2px solid #333;
+            border-radius: 12px;
+        }
+        canvas:active {
+            cursor: grabbing;
+        }
+        button {
+            background: #ff7043;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 8px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #d84315;
+        }
+        .info {
+            font-size: 16px;
+            background: #ffe0b2;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📷 সূচিছিদ্র ক্যামেরা – হাতে কলমে পরীক্ষা</h1>
+    <div class="box">
+        <canvas id="camCanvas" width="800" height="300"></canvas>
+        <div class="info">🖱️ মোমবাতি, ছিদ্র অথবা পর্দা টেনে সরাও – প্রতিকৃতি উল্টো ও বড়/ছোট হবে</div>
+        <button onclick="resetAll()">🔄 আবার সাজাও</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('camCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // শুরু অবস্থান
+        let candleX = 150;
+        let holeX = 400;
+        let screenX = 700;
+
+        // স্থির উচ্চতা
+        const holeY = 150;        // ছিদ্রের উচ্চতা (কেন্দ্র)
+        const flameTop = 100;     // মোমবাতির শিখার উপর
+        const flameBottom = 200;  // মোমবাতির শিখার নিচ
+        const flameMid = (flameTop + flameBottom) / 2;
+
+        let dragging = null; // 'candle', 'hole', 'screen'
+
+        // অঙ্কন
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // পর্দা
+            ctx.fillStyle = '#bcaaa4';
+            ctx.fillRect(screenX - 3, 30, 6, 240);
+            ctx.fillStyle = '#555';
+            ctx.font = '14px "Noto Sans Bengali"';
+            ctx.fillText('পর্দা', screenX - 20, 20);
+
+            // ছিদ্রযুক্ত কার্ড
+            ctx.fillStyle = '#5d4037';
+            ctx.fillRect(holeX - 3, 30, 6, 240);
+            ctx.fillStyle = '#222';
+            ctx.fillText('ছিদ্র', holeX - 15, 20);
+            // ছিদ্রের ফুটো
+            ctx.beginPath();
+            ctx.arc(holeX, holeY, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ffff8d';
+            ctx.fill();
+            ctx.strokeStyle = '#000';
+            ctx.stroke();
+
+            // মোমবাতি
+            // বাতির গোড়া
+            ctx.fillStyle = '#f5f5f5';
+            ctx.fillRect(candleX - 8, 220, 16, 50);
+            // শিখা
+            ctx.beginPath();
+            ctx.moveTo(candleX, flameTop);
+            ctx.lineTo(candleX - 16, flameBottom);
+            ctx.lineTo(candleX + 16, flameBottom);
+            ctx.closePath();
+            ctx.fillStyle = '#ff9800';
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(candleX, flameMid, 8, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ffd54f';
+            ctx.fill();
+            ctx.fillStyle = '#000';
+            ctx.fillText('মোমবাতি', candleX - 25, 260);
+
+            // রশ্মি ও প্রতিকৃতির হিসাব
+            const objDist = holeX - candleX;
+            const imgDist = screenX - holeX;
+            if (objDist > 10 && imgDist > 10) {
+                // উপরের বিন্দু (flameTop) থেকে রশ্মি -> পর্দায় নিচে যাবে
+                const imgTopY = holeY + (holeY - flameBottom) * imgDist / objDist;
+                const imgBotY = holeY + (holeY - flameTop) * imgDist / objDist;
+                // রশ্মি আঁকা (দুটো আলাদা রং)
+                drawRay(candleX, flameTop, holeX, holeY, '#ff7043');
+                drawRay(holeX, holeY, screenX, imgBotY, '#ff7043');
+                drawRay(candleX, flameBottom, holeX, holeY, '#42a5f5');
+                drawRay(holeX, holeY, screenX, imgTopY, '#42a5f5');
+                // পর্দায় উল্টো প্রতিকৃতি
+                const imgH = imgBotY - imgTopY;
+                ctx.fillStyle = '#ff9800';
+                ctx.fillRect(screenX + 1, imgTopY, 3, imgH);
+                ctx.fillStyle = '#000';
+                ctx.fillText('উল্টো প্রতিকৃতি', screenX + 10, (imgTopY + imgBotY) / 2);
+            }
+        }
+
+        function drawRay(x1, y1, x2, y2, col) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = col;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        // মাউস ইভেন্ট
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX - rect.left) * (canvas.width / rect.width),
+                y: (e.clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const p = getPos(e);
+            if (Math.abs(p.x - candleX) < 30 && p.y > 80 && p.y < 260) dragging = 'candle';
+            else if (Math.abs(p.x - holeX) < 30 && p.y > 30 && p.y < 270) dragging = 'hole';
+            else if (Math.abs(p.x - screenX) < 30 && p.y > 30 && p.y < 270) dragging = 'screen';
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!dragging) return;
+            const p = getPos(e);
+            if (dragging === 'candle') candleX = Math.min(holeX - 40, Math.max(50, p.x));
+            if (dragging === 'hole') holeX = Math.min(screenX - 60, Math.max(candleX + 40, p.x));
+            if (dragging === 'screen') screenX = Math.min(780, Math.max(holeX + 60, p.x));
+            draw();
+        });
+
+        canvas.addEventListener('mouseup', () => { dragging = null; });
+        canvas.addEventListener('mouseleave', () => { dragging = null; });
+
+        function resetAll() {
+            candleX = 150;
+            holeX = 400;
+            screenX = 700;
+            draw();
+        }
+
+        draw();
+    </script>
+</body>
+</html>
