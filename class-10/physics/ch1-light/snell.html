@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>আলোর প্রতিসরণ | Snell's Law | by Arif Hussain</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Tangerine:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --panel-bg: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --accent: #ff9800;
+            --accent2: #58a6ff;
+            --danger: #f85149;
+            --btn-bg: #21262d;
+            --btn-hover: #30363d;
+            --ray-incident: #ffb74d;
+            --ray-refracted: #4fc3f7;
+            --normal: #888;
+            --slider-track: #30363d;
+            --slider-fill: #ff9800;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 16px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .app-header {
+            text-align: center;
+            padding: 12px 20px;
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .app-header h1 {
+            font-size: clamp(1.4em, 4vw, 2em);
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+        .branding {
+            font-family: 'Tangerine', cursive;
+            font-size: clamp(1.3em, 3.5vw, 1.8em);
+            color: #ffd54f;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .canvas-wrapper {
+            background: var(--panel-bg);
+            border-radius: 20px;
+            padding: 10px;
+            border: 2px solid var(--border);
+            box-shadow: 0 0 40px rgba(255, 152, 0, 0.08);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            touch-action: none;
+            cursor: grab;
+        }
+        canvas:active {
+            cursor: grabbing;
+        }
+
+        .controls-panel {
+            background: var(--panel-bg);
+            border-radius: 20px;
+            padding: 20px 24px;
+            border: 2px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .slider-group label {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: var(--accent);
+            min-width: 100px;
+            text-align: right;
+        }
+        .slider-group input[type=range] {
+            -webkit-appearance: none;
+            width: 220px;
+            height: 14px;
+            border-radius: 7px;
+            background: var(--slider-track);
+            outline: none;
+            accent-color: var(--accent);
+        }
+        .slider-group input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: 3px solid #fff;
+            box-shadow: 0 0 16px rgba(255, 152, 0, 0.5);
+        }
+        .angle-value {
+            font-weight: bold;
+            font-size: 1.3em;
+            color: #ffd54f;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .media-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+        }
+        .media-selector span.label {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: var(--accent2);
+            margin-right: 4px;
+        }
+        .media-btn {
+            background: var(--btn-bg);
+            color: var(--text);
+            border: 2px solid var(--border);
+            padding: 14px 20px;
+            border-radius: 30px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.25s;
+            touch-action: manipulation;
+            white-space: nowrap;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+        .media-btn:hover {
+            background: var(--btn-hover);
+            border-color: #58a6ff;
+        }
+        .media-btn.active {
+            background: #1a3a5c;
+            border-color: var(--accent2);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+            transform: scale(1.04);
+        }
+
+        .data-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            width: 100%;
+        }
+        .data-card {
+            background: var(--btn-bg);
+            border-radius: 16px;
+            padding: 14px 22px;
+            text-align: center;
+            border: 2px solid var(--border);
+            min-width: 120px;
+            flex: 1;
+            max-width: 200px;
+        }
+        .data-card .label {
+            font-size: 0.85em;
+            color: #8b949e;
+            margin-bottom: 4px;
+        }
+        .data-card .val {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #ffd54f;
+        }
+        .data-card .val.small {
+            font-size: 1.2em;
+            color: #e6edf3;
+        }
+
+        .note-box {
+            background: var(--panel-bg);
+            border-left: 5px solid var(--accent);
+            border-radius: 0 12px 12px 0;
+            padding: 14px 18px;
+            font-size: 0.95em;
+            color: #b0b8c0;
+            line-height: 1.6;
+        }
+        .note-box .hl {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .slider-group input[type=range] {
+                width: 140px;
+            }
+            .media-btn {
+                padding: 10px 14px;
+                font-size: 0.85em;
+            }
+            .data-card {
+                min-width: 90px;
+                padding: 10px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-header">
+        <h1>🔬 আলোর প্রতিসরণ (Snell's Law)</h1>
+        <span class="branding">by Arif Hussain</span>
+    </div>
+    <div class="main-container">
+        <!-- ক্যানভাস -->
+        <div class="canvas-wrapper">
+            <canvas id="refractionCanvas" width="900" height="520"></canvas>
+        </div>
+
+        <!-- কন্ট্রোল প্যানেল -->
+        <div class="controls-panel">
+            <div class="slider-group">
+                <label for="angleSlider">📐 আপতন কোণ:</label>
+                <input type="range" id="angleSlider" min="0" max="85" value="35" oninput="onSliderChange(this.value)" ontouchmove="onSliderChange(this.value)">
+                <span class="angle-value" id="sliderAngleDisplay">35°</span>
+            </div>
+            <div class="media-selector">
+                <span class="label">🧪 মাধ্যম ২:</span>
+                <button class="media-btn active" data-medium="water" onclick="selectMedium('water', this)">💧 পানি (1.33)</button>
+                <button class="media-btn" data-medium="glass" onclick="selectMedium('glass', this)">🪟 কাঁচ (1.50)</button>
+                <button class="media-btn" data-medium="diamond" onclick="selectMedium('diamond', this)">💎 হীরা (2.42)</button>
+                <button class="media-btn" data-medium="glycerin" onclick="selectMedium('glycerin', this)">🧴 গ্লিসারিন (1.47)</button>
+            </div>
+        </div>
+
+        <!-- ডাটা ডিসপ্লে -->
+        <div class="data-row">
+            <div class="data-card">
+                <div class="label">📐 আপতন কোণ (θ₁)</div>
+                <div class="val" id="dataTheta1">35.0°</div>
+            </div>
+            <div class="data-card">
+                <div class="label">📏 প্রতিসরণ কোণ (θ₂)</div>
+                <div class="val" id="dataTheta2">25.5°</div>
+            </div>
+            <div class="data-card">
+                <div class="label">🔢 প্রতিসরাঙ্ক (n₂)</div>
+                <div class="val small" id="dataN2">1.333</div>
+            </div>
+            <div class="data-card">
+                <div class="label">✖️ n₁ sinθ₁ = n₂ sinθ₂</div>
+                <div class="val small" id="dataSnell">0.574 = 0.574</div>
+            </div>
+        </div>
+
+        <!-- নোট -->
+        <div class="note-box">
+            <strong>📖 সূত্র:</strong> <span class="hl">n₁ sinθ₁ = n₂ sinθ₂</span> (স্নেলের সূত্র)<br>
+            <strong>🖱️</strong> উপরের অংশে আলোক উৎসটি টেনে সরাও অথবা স্লাইডার ব্যবহার করো। <strong>মাধ্যম ২</strong> পরিবর্তন করে প্রতিসরণের পরিবর্তন দেখো।
+            <span class="hl">অভিলম্ব</span> (ড্যাশ লাইন) থেকে কোণ মাপা হয়।
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('refractionCanvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width,
+                h = canvas.height;
+
+            // ---------- ফিজিক্স স্টেট ----------
+            const n1 = 1.0; // বায়ু (মাধ্যম ১)
+            let n2 = 1.333; // ডিফল্ট: পানি
+            let theta1Deg = 35; // আপতন কোণ (ডিগ্রি)
+            let sourceSide = 'left'; // উৎস কোন পাশে
+
+            // জ্যামিতি
+            const incidenceX = w / 2;
+            const incidenceY = 260; // সীমানার y-স্থানাঙ্ক
+            const sourceDistance = 200; // উৎস থেকে আপতন বিন্দুর দূরত্ব (পিক্সেল)
+
+            // ড্র্যাগ স্টেট
+            let isDragging = false;
+
+            // ---------- মাধ্যমের ডাটা ----------
+            const mediaData = {
+                water: { n: 1.333, name: 'পানি', color: '#0d2137', colorLight: '#1a3d5c' },
+                glass: { n: 1.5, name: 'কাঁচ', color: '#1a2a38', colorLight: '#1a3545' },
+                diamond: { n: 2.42, name: 'হীরা', color: '#1a2a40', colorLight: '#1a3d55' },
+                glycerin: { n: 1.47, name: 'গ্লিসারিন', color: '#1a1f2e', colorLight: '#1a2a3a' }
+            };
+            let currentMedium = 'water';
+
+            // ---------- সোর্স পজিশন হিসাব ----------
+            function getSourcePosition(thetaDeg, side) {
+                const thetaRad = thetaDeg * Math.PI / 180;
+                const sign = (side === 'left') ? -1 : 1;
+                const sx = incidenceX + sign * sourceDistance * Math.sin(thetaRad);
+                const sy = incidenceY - sourceDistance * Math.cos(thetaRad);
+                return { x: sx, y: sy };
+            }
+
+            function getThetaFromSource(sx, sy) {
+                const dx = sx - incidenceX;
+                const dy = incidenceY - sy; // positive (source above)
+                if (dy < 5) return { thetaDeg: 85, side: dx < 0 ? 'left' : 'right' };
+                const thetaRad = Math.atan2(Math.abs(dx), dy);
+                const thetaDeg = Math.min(85, thetaRad * 180 / Math.PI);
+                const side = dx < 0 ? 'left' : 'right';
+                return { thetaDeg, side };
+            }
+
+            let sourcePos = getSourcePosition(theta1Deg, sourceSide);
+
+            // ---------- স্নেলের সূত্র ----------
+            function computeRefraction(theta1Deg) {
+                const theta1Rad = theta1Deg * Math.PI / 180;
+                const sinTheta1 = Math.sin(theta1Rad);
+                const sinTheta2 = (n1 / n2) * sinTheta1;
+                if (sinTheta2 >= 1.0) {
+                    // পূর্ণ অভ্যন্তরীণ প্রতিফলন (এখানে n₂ > n₁ হলে হবে না)
+                    return { theta2Deg: 90, sinTheta2: 1.0, isTIR: true };
+                }
+                const theta2Rad = Math.asin(sinTheta2);
+                const theta2Deg = theta2Rad * 180 / Math.PI;
+                return { theta2Deg, sinTheta2, isTIR: false };
+            }
+
+            // ---------- অঙ্কন ----------
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+
+                // পটভূমি
+                const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+                bgGrad.addColorStop(0, '#0d1117');
+                bgGrad.addColorStop(0.48, '#111820');
+                bgGrad.addColorStop(0.5, '#2a3040');
+                bgGrad.addColorStop(0.52, mediaData[currentMedium].color);
+                bgGrad.addColorStop(1, mediaData[currentMedium].colorLight);
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, w, h);
+
+                // সীমানা রেখা
+                ctx.strokeStyle = '#8899aa';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(20, incidenceY);
+                ctx.lineTo(w - 20, incidenceY);
+                ctx.stroke();
+
+                // মাধ্যম লেবেল
+                ctx.fillStyle = '#c0c8d0';
+                ctx.font = 'bold 15px "Noto Sans Bengali"';
+                ctx.fillText('মাধ্যম ১: বায়ু (n₁ = 1.0)', 30, 40);
+                ctx.fillText('মাধ্যম ২: ' + mediaData[currentMedium].name + ' (n₂ = ' + n2.toFixed(2) + ')', 30, incidenceY + 30);
+
+                // অভিলম্ব (ড্যাশ)
+                ctx.strokeStyle = '#888';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([10, 8]);
+                ctx.beginPath();
+                ctx.moveTo(incidenceX, 50);
+                ctx.lineTo(incidenceX, h - 40);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = '#999';
+                ctx.font = '13px "Noto Sans Bengali"';
+                ctx.fillText('অভিলম্ব', incidenceX + 10, 65);
+
+                // আপতন বিন্দু
+                ctx.beginPath();
+                ctx.arc(incidenceX, incidenceY, 7, 0, 2 * Math.PI);
+                ctx.fillStyle = '#fff';
+                ctx.fill();
+                ctx.strokeStyle = '#ff9800';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // আপতিত রশ্মি
+                const sx = sourcePos.x;
+                const sy = sourcePos.y;
+                // গ্লো
+                ctx.save();
+                ctx.shadowColor = '#ffb74d';
+                ctx.shadowBlur = 20;
+                ctx.strokeStyle = '#ffb74d';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(sx, sy);
+                ctx.lineTo(incidenceX, incidenceY);
+                ctx.stroke();
+                ctx.restore();
+                // কোর লাইন
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(sx, sy);
+                ctx.lineTo(incidenceX, incidenceY);
+                ctx.stroke();
+
+                // প্রতিসৃত রশ্মি
+                const refraction = computeRefraction(theta1Deg);
+                const theta2Rad = refraction.theta2Deg * Math.PI / 180;
+                const sign = (sourceSide === 'left') ? 1 : -1;
+                const refractedLength = 200;
+                const rx = incidenceX + sign * refractedLength * Math.sin(theta2Rad);
+                const ry = incidenceY + refractedLength * Math.cos(theta2Rad);
+
+                // গ্লো
+                ctx.save();
+                ctx.shadowColor = '#4fc3f7';
+                ctx.shadowBlur = 18;
+                ctx.strokeStyle = '#4fc3f7';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(incidenceX, incidenceY);
+                ctx.lineTo(rx, ry);
+                ctx.stroke();
+                ctx.restore();
+                // কোর
+                ctx.strokeStyle = '#b3e5fc';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(incidenceX, incidenceY);
+                ctx.lineTo(rx, ry);
+                ctx.stroke();
+
+                // আপতিত রশ্মির তীরচিহ্ন
+                drawArrowhead(sx, sy, incidenceX, incidenceY, '#ffb74d', 16);
+                // প্রতিসৃত রশ্মির তীরচিহ্ন
+                drawArrowhead(incidenceX, incidenceY, rx, ry, '#4fc3f7', 16);
+
+                // কোণের আর্ক – θ₁ (আপতন)
+                drawAngleArc(incidenceX, incidenceY, 55, -90, theta1Deg, sourceSide, '#ffb74d', 'θ₁=' + theta1Deg.toFixed(1) + '°');
+
+                // কোণের আর্ক – θ₂ (প্রতিসরণ)
+                drawAngleArc(incidenceX, incidenceY, 55, 90, refraction.theta2Deg, sourceSide === 'left' ? 'right' :
+                    'left', '#4fc3f7', 'θ₂=' + refraction.theta2Deg.toFixed(1) + '°');
+
+                // আলোক উৎস (সোর্স)
+                const srcGrad = ctx.createRadialGradient(sx, sy, 4, sx, sy, 28);
+                srcGrad.addColorStop(0, '#fff');
+                srcGrad.addColorStop(0.3, '#ffeb3b');
+                srcGrad.addColorStop(0.7, 'rgba(255,152,0,0.4)');
+                srcGrad.addColorStop(1, 'rgba(255,100,0,0)');
+                ctx.beginPath();
+                ctx.arc(sx, sy, 28, 0, 2 * Math.PI);
+                ctx.fillStyle = srcGrad;
+                ctx.fill();
+                // কোর
+                ctx.beginPath();
+                ctx.arc(sx, sy, 10, 0, 2 * Math.PI);
+                ctx.fillStyle = '#fff';
+                ctx.fill();
+                ctx.strokeStyle = '#ff9800';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                // লেবেল
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 14px "Noto Sans Bengali"';
+                ctx.fillText('আলোক উৎস', sx - 30, sy - 25);
+
+                // ডাটা আপডেট
+                updateDataDisplay(theta1Deg, refraction);
+            }
+
+            function drawArrowhead(x1, y1, x2, y2, color, size) {
+                const angle = Math.atan2(y2 - y1, x2 - x1);
+                const t = 0.55; // রশ্মির মাঝামাঝি
+                const ax = x1 + (x2 - x1) * t;
+                const ay = y1 + (y2 - y1) * t;
+                ctx.save();
+                ctx.translate(ax, ay);
+                ctx.rotate(angle);
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(-size, -size * 0.45);
+                ctx.lineTo(-size, size * 0.45);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+
+            function drawAngleArc(cx, cy, radius, baseAngleDeg, sweepDeg, side, color, label) {
+                // baseAngleDeg: অভিলম্বের দিক (ডিগ্রি) – -90 = উপরে, 90 = নিচে
+                const baseRad = baseAngleDeg * Math.PI / 180;
+                const sweepRad = sweepDeg * Math.PI / 180;
+                let startAngle, endAngle;
+                if (side === 'left') {
+                    startAngle = baseRad;
+                    endAngle = baseRad - sweepRad;
+                } else {
+                    startAngle = baseRad;
+                    endAngle = baseRad + sweepRad;
+                }
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, Math.min(startAngle, endAngle), Math.max(startAngle, endAngle));
+                ctx.stroke();
+                // লেবেল
+                const midAngle = (startAngle + endAngle) / 2;
+                const lx = cx + (radius + 35) * Math.cos(midAngle);
+                const ly = cy + (radius + 35) * Math.sin(midAngle);
+                ctx.fillStyle = color;
+                ctx.font = 'bold 14px "Noto Sans Bengali"';
+                ctx.fillText(label, lx - 20, ly + 5);
+            }
+
+            function updateDataDisplay(theta1Deg, refraction) {
+                document.getElementById('dataTheta1').textContent = theta1Deg.toFixed(1) + '°';
+                document.getElementById('dataTheta2').textContent = refraction.theta2Deg.toFixed(1) + '°';
+                document.getElementById('dataN2').textContent = n2.toFixed(3);
+                const sinTheta1 = Math.sin(theta1Deg * Math.PI / 180);
+                const n1sin = (n1 * sinTheta1).toFixed(4);
+                const n2sin = (n2 * refraction.sinTheta2).toFixed(4);
+                document.getElementById('dataSnell').textContent = n1sin + ' = ' + n2sin;
+                document.getElementById('sliderAngleDisplay').textContent = theta1Deg.toFixed(0) + '°';
+                document.getElementById('angleSlider').value = Math.round(theta1Deg);
+            }
+
+            // ---------- ইভেন্ট হ্যান্ডলার ----------
+            function onSliderChange(val) {
+                theta1Deg = parseFloat(val);
+                sourcePos = getSourcePosition(theta1Deg, sourceSide);
+                draw();
+            }
+
+            function selectMedium(mediumKey, btn) {
+                currentMedium = mediumKey;
+                n2 = mediaData[mediumKey].n;
+                document.querySelectorAll('.media-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                draw();
+            }
+
+            function getCanvasCoords(e) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = w / rect.width;
+                const scaleY = h / rect.height;
+                let cx, cy;
+                if (e.touches && e.touches.length > 0) {
+                    cx = e.touches[0].clientX;
+                    cy = e.touches[0].clientY;
+                } else if (e.changedTouches && e.changedTouches.length > 0) {
+                    cx = e.changedTouches[0].clientX;
+                    cy = e.changedTouches[0].clientY;
+                } else {
+                    cx = e.clientX;
+                    cy = e.clientY;
+                }
+                return {
+                    x: (cx - rect.left) * scaleX,
+                    y: (cy - rect.top) * scaleY
+                };
+            }
+
+            function isNearSource(px, py) {
+                const dx = px - sourcePos.x;
+                const dy = py - sourcePos.y;
+                return Math.sqrt(dx * dx + dy * dy) < 50;
+            }
+
+            canvas.addEventListener('mousedown', onPointerDown);
+            canvas.addEventListener('touchstart', onPointerDown, { passive: false });
+
+            function onPointerDown(e) {
+                const pos = getCanvasCoords(e);
+                if (isNearSource(pos.x, pos.y) && pos.y < incidenceY - 10) {
+                    isDragging = true;
+                    e.preventDefault();
+                    window.addEventListener('mousemove', onPointerMove);
+                    window.addEventListener('touchmove', onPointerMove, { passive: false });
+                    window.addEventListener('mouseup', onPointerUp);
+                    window.addEventListener('touchend', onPointerUp);
+                }
+            }
+
+            function onPointerMove(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                const pos = getCanvasCoords(e);
+                // সীমাবদ্ধ করো (মাধ্যম ১-এর মধ্যে)
+                const clampedY = Math.min(incidenceY - 15, Math.max(30, pos.y));
+                const clampedX = Math.max(30, Math.min(w - 30, pos.x));
+                const result = getThetaFromSource(clampedX, clampedY);
+                theta1Deg = result.thetaDeg;
+                sourceSide = result.side;
+                sourcePos = { x: clampedX, y: clampedY };
+                // সোর্স দূরত্ব ঠিক রাখতে পুনরায় হিসাব
+                const dist = Math.sqrt((clampedX - incidenceX) ** 2 + (clampedY - incidenceY) ** 2);
+                if (dist > 10) {
+                    const scale = sourceDistance / dist;
+                    sourcePos.x = incidenceX + (clampedX - incidenceX) * scale;
+                    sourcePos.y = incidenceY + (clampedY - incidenceY) * scale;
+                    // আবার কোণ আপডেট
+                    const res2 = getThetaFromSource(sourcePos.x, sourcePos.y);
+                    theta1Deg = res2.thetaDeg;
+                    sourceSide = res2.side;
+                }
+                document.getElementById('angleSlider').value = Math.round(theta1Deg);
+                document.getElementById('sliderAngleDisplay').textContent = Math.round(theta1Deg) + '°';
+                draw();
+            }
+
+            function onPointerUp() {
+                isDragging = false;
+                window.removeEventListener('mousemove', onPointerMove);
+                window.removeEventListener('touchmove', onPointerMove);
+                window.removeEventListener('mouseup', onPointerUp);
+                window.removeEventListener('touchend', onPointerUp);
+            }
+
+            // ---------- কিবোর্ড (TV রিমোটের জন্য) ----------
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+                    theta1Deg = Math.max(0, theta1Deg - 2);
+                    sourcePos = getSourcePosition(theta1Deg, sourceSide);
+                    document.getElementById('angleSlider').value = Math.round(theta1Deg);
+                    draw();
+                } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+                    theta1Deg = Math.min(85, theta1Deg + 2);
+                    sourcePos = getSourcePosition(theta1Deg, sourceSide);
+                    document.getElementById('angleSlider').value = Math.round(theta1Deg);
+                    draw();
+                }
+            });
+
+            // ---------- শুরু ----------
+            document.getElementById('angleSlider').value = theta1Deg;
+            document.getElementById('sliderAngleDisplay').textContent = theta1Deg + '°';
+            draw();
+
+            // এক্সপোজ গ্লোবাল
+            window.onSliderChange = onSliderChange;
+            window.selectMedium = selectMedium;
+        })();
+    </script>
+</body>
+</html>
